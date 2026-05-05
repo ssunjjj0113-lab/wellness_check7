@@ -2,21 +2,23 @@ import { useState } from "react";
 
 /* ── Design tokens ── */
 const T = {
-  cream:   "#FAF6EF",
-  paper:   "#F3EDE3",
-  card:    "#FFFFFF",
-  stroke:  "#E8DDD0",
-  muted:   "#B8AA9A",
-  text:    "#2A1F18",
-  sub:     "#7A6A5A",
-  sage:    "#8B9E7A",
-  rose:    "#C4856A",
-  amber:   "#B8966A",
-  taupe:   "#9E8A7A",
-  sageL:   "#EDF2EA",
-  roseL:   "#F9EDE8",
-  amberL:  "#F5EFE4",
-  taupeL:  "#F2ECE8",
+  cream:   "#F4F6E4",
+  paper:   "#EBEdd8",
+  card:    "#FAFBF2",
+  stroke:  "#C8CAA0",
+  muted:   "#A09880",
+  text:    "#3D4A3E",
+  textDark: "#3D4A3E",
+  wildRose: "#9B7060",
+  sub:     "#6B7A5C",
+  sage:    "#6A9B72",
+  rose:    "#B07060",
+  amber:   "#A88450",
+  taupe:   "#8A7A6A",
+  sageL:   "#E8F0E4",
+  roseL:   "#F2E8E4",
+  amberL:  "#F0EAE0",
+  taupeL:  "#EDE8E4",
 };
 
 const MARKS = [
@@ -195,7 +197,14 @@ export default function App() {
 
       {/* Header */}
       <div style={{ background: T.paper, borderBottom: `1px solid ${T.stroke}`, padding: "40px 24px 28px", textAlign: "center" }}>
-        <div style={{ fontSize: 11, letterSpacing: "0.18em", color: T.muted, marginBottom: 10, fontWeight: 500 }}>WELLNESS CHECKLIST</div>
+        <div style={{ fontSize: 11, letterSpacing: "0.18em", marginBottom: 10, fontWeight: 500 }}>
+          {[...'BETTER HOUR CHECKLIST'].map((ch, i) => {
+            const palette = ['#8FA87A','#9B8FB5','#7AAAB8','#B09060','#B8909A','#7A9858'];
+            return ch === ' '
+              ? <span key={i}>&nbsp;</span>
+              : <span key={i} style={{ color: palette[i % palette.length] }}>{ch}</span>;
+          })}
+        </div>
         <h1 style={{ ...S.serif, margin: 0, fontSize: 34, fontWeight: 300, color: T.text, letterSpacing: "-0.01em", lineHeight: 1.2 }}>
           나를 이해하고,<br /><em>나답게 살아가기</em>
         </h1>
@@ -289,7 +298,7 @@ export default function App() {
             <div style={{ background: current.light, border: `1px solid ${current.border}`, borderRadius: 16, padding: "20px", marginBottom: 18 }}>
               <div style={{ fontSize: 10, letterSpacing: "0.18em", color: current.color, marginBottom: 6, fontWeight: 500 }}>{current.en.toUpperCase()}</div>
               <div style={{ ...S.serif, fontSize: 22, fontWeight: 400, color: T.text, marginBottom: 6 }}>{current.label}</div>
-              <div style={{ fontSize: 12, color: T.sub, fontWeight: 300 }}>{current.desc}</div>
+              <div style={{ fontSize: 12, color: T.wildRose, fontWeight: 300 }}>{current.desc}</div>
               {current.note && (
                 <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${current.border}`, fontSize: 11, color: T.sub, fontWeight: 300, lineHeight: 1.7 }}>
                   ⚠ {current.note}
@@ -316,7 +325,7 @@ export default function App() {
                     </div>
                   )}
                   <div style={{ ...S.card, padding: "16px 18px", marginBottom: 10, background: selM ? selM.bg : T.card, border: `1px solid ${selM ? selM.border : T.stroke}` }}>
-                    <div style={{ fontSize: 13, color: T.text, lineHeight: 1.7, marginBottom: 13, fontWeight: 300, display: "flex", alignItems: "flex-start", gap: 8 }}>
+                    <div style={{ fontSize: 13, color: T.textDark, lineHeight: 1.7, marginBottom: 13, fontWeight: 400, display: "flex", alignItems: "flex-start", gap: 8 }}>
                       {item.reverse && <span style={{ flexShrink: 0, fontSize: 9, letterSpacing: "0.1em", color: T.rose, border: `1px solid ${T.rose}40`, borderRadius: 4, padding: "2px 5px", marginTop: 2 }}>역채점</span>}
                       {item.neutral && <span style={{ flexShrink: 0, fontSize: 9, letterSpacing: "0.1em", color: T.amber, border: `1px solid ${T.amber}40`, borderRadius: 4, padding: "2px 5px", marginTop: 2 }}>참고</span>}
                       {item.q}
@@ -402,7 +411,7 @@ export default function App() {
                 const mark = mIdx !== undefined ? MARKS[mIdx] : null;
                 return (
                   <div key={ni} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: ni < 5 ? `1px solid ${T.amber}30` : "none" }}>
-                    <span style={{ fontSize: 12, color: T.sub, flex: 1, paddingRight: 12, fontWeight: 300 }}>{item.q}</span>
+                    <span style={{ fontSize: 12, color: T.textDark, flex: 1, paddingRight: 12, fontWeight: 400 }}>{item.q}</span>
                     <span style={{ ...S.serif, fontSize: 20, fontWeight: 400, color: mark ? mark.color : T.stroke, minWidth: 24, textAlign: "center" }}>
                       {mark ? mark.symbol : "—"}
                     </span>
