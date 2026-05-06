@@ -1,36 +1,29 @@
 import { useState } from "react";
 
-/* ── Design tokens ── */
+/* ── Pastel Design tokens ── */
 const T = {
-  cream:   "#F4F6E4",
-  paper:   "#EBEdd8",
-  card:    "#FAFBF2",
-  stroke:  "#C8CAA0",
-  muted:   "#A09880",
-  text:    "#3D4A3E",
-  textDark: "#3D4A3E",
-  wildRose: "#9B7060",
-  sub:     "#6B7A5C",
-  sage:    "#6A9B72",
-  rose:    "#B07060",
-  amber:   "#A88450",
-  taupe:   "#8A7A6A",
-  sageL:   "#E8F0E4",
-  roseL:   "#F2E8E4",
-  amberL:  "#F0EAE0",
-  taupeL:  "#EDE8E4",
+  bg:       "#FAFAFA",
+  mint:     "#AACCA8",  mintL: "#E4F0E2",  mintD: "#5A8A58",
+  pink:     "#A8C8D8",  pinkL: "#DFF0F8",  pinkD: "#4A88A0",
+  yellow:   "#D8D090",  yellowL: "#F5F2D8", yellowD: "#888040",
+  lav:      "#E8C0C0",  lavL:  "#F8E8E8",  lavD:  "#A06060",
+  text:     "#3A3A3A",
+  sub:      "#707070",
+  muted:    "#AAAAAA",
+  stroke:   "#E0E0E0",
+  card:     "#FFFFFF",
 };
 
 const MARKS = [
-  { symbol: "○", label: "예",     score: 2, color: T.sage,  bg: T.sageL,  border: "#B5CAAC" },
-  { symbol: "△", label: "보통",   score: 1, color: T.amber, bg: T.amberL, border: "#CDB990" },
-  { symbol: "✕", label: "아니오", score: 0, color: T.rose,  bg: T.roseL,  border: "#D9A898" },
+  { symbol: "○", label: "예",     score: 2, color: T.mintD,   bg: T.mintL,   border: T.mint },
+  { symbol: "△", label: "보통",   score: 1, color: T.yellowD, bg: T.yellowL, border: T.yellow },
+  { symbol: "✕", label: "아니오", score: 0, color: T.pink,    bg: T.pinkL,   border: T.pink },
 ];
 
 const categories = [
   {
     id: "physical", emoji: "🌿", label: "신체적 웰니스", en: "Physical Wellness",
-    color: T.sage, light: T.sageL, border: "#B5CAAC",
+    color: T.mintD, light: T.mintL, border: T.mint, bg: T.mintL,
     desc: "몸의 건강을 능동적으로 관리하는 것",
     items: [
       { q: "하루 30분 이상 신체 활동(운동, 걷기 등)을 한다" },
@@ -45,7 +38,7 @@ const categories = [
   },
   {
     id: "mental", emoji: "🕊️", label: "정신건강", en: "Mental Wellness",
-    color: T.rose, light: T.roseL, border: "#D9A898",
+    color: T.lavD, light: T.lavL, border: T.lav, bg: T.lavL,
     desc: "감정·심리적 균형과 정신건강 전반을 점검하는 것",
     note: "아래 역채점 항목은 전문가 진단이 아닙니다. 이상 신호가 다수일 경우 전문의 상담을 권장합니다.",
     items: [
@@ -68,7 +61,7 @@ const categories = [
   },
   {
     id: "daily", emoji: "☀️", label: "일상 계획", en: "Daily Routine",
-    color: T.amber, light: T.amberL, border: "#CDB990",
+    color: T.yellowD, light: T.yellowL, border: T.yellow, bg: T.yellowL,
     desc: "평일 루틴과 1년 이내 주요 생활 변화 계획 파악",
     note: "생활 계획 항목은 계획이 있으면 ○, 가능성 있으면 △, 없으면 ✕로 표시해 주세요.",
     items: [
@@ -89,7 +82,7 @@ const categories = [
   },
   {
     id: "social", emoji: "🌸", label: "사회적 웰니스", en: "Social Wellness",
-    color: T.taupe, light: T.taupeL, border: "#C4B2A8",
+    color: T.pinkD, light: T.pinkL, border: T.pink, bg: T.pinkL,
     desc: "건강한 인간관계, 소속감, 일·학업의 의미를 통합적으로 점검",
     items: [
       { q: "신뢰할 수 있는 가족이나 친구가 있다" },
@@ -107,53 +100,57 @@ const categories = [
 ];
 
 const sectionBreaks = {
-  mental: { 5: "자가 점검 Checklist" },
-  daily:  { 7: "1년 이내 계획 Life Plan" },
-  social: { 5: "직업·학업 Career & Study" },
+  mental: { 5: "자가 점검 checklist ✦" },
+  daily:  { 7: "1년 이내 계획 life plan ✦" },
+  social: { 5: "직업·학업 career & study ✦" },
 };
 
 function getGrade(pct) {
-  if (pct >= 80) return { label: "Very Good", ko: "매우 좋음",      color: T.sage };
-  if (pct >= 60) return { label: "Good",      ko: "좋음",           color: "#9AAD88" };
-  if (pct >= 40) return { label: "Fair",       ko: "보통",           color: T.amber };
-  if (pct >= 20) return { label: "Caution",    ko: "주의 필요",      color: T.rose };
-  return             { label: "Attention",    ko: "집중 관리 필요", color: "#C06050" };
+  if (pct >= 80) return { label: "Very Good", ko: "매우 좋음 ✦", color: T.mintD };
+  if (pct >= 60) return { label: "Good",      ko: "좋음 ✦",     color: T.lavD };
+  if (pct >= 40) return { label: "Fair",       ko: "보통",        color: T.yellowD };
+  if (pct >= 20) return { label: "Caution",    ko: "주의 필요",   color: T.pink };
+  return             { label: "Attention",    ko: "집중 관리",   color: T.pinkD };
+}
+
+/* ── Wavy SVG decoration ── */
+function WavyDeco({ color, flip = false }) {
+  return (
+    <svg width="60" height="60" viewBox="0 0 60 60" style={{ position:"absolute", [flip?"right":"left"]: 0, top: 0, opacity: 0.35 }}>
+      <path d="M0,0 Q15,10 30,0 Q45,-10 60,0 L60,20 Q45,30 30,20 Q15,10 0,20 Z" fill={color}/>
+    </svg>
+  );
 }
 
 function ArcMeter({ pct, color, size = 100 }) {
-  const cx = size / 2, cy = size / 2;
-  const r = size * 0.38;
-  const start = Math.PI * 0.8, end = Math.PI * 2.2;
+  const cx = size/2, cy = size/2, r = size*0.36;
+  const start = Math.PI*0.8, end = Math.PI*2.2;
   const range = end - start;
-  const angle = start + (pct / 100) * range;
-  const x1 = cx + r * Math.cos(start), y1 = cy + r * Math.sin(start);
-  const x2 = cx + r * Math.cos(end),   y2 = cy + r * Math.sin(end);
-  const ax = cx + r * Math.cos(angle), ay = cy + r * Math.sin(angle);
+  const angle = start + (pct/100)*range;
+  const x1 = cx+r*Math.cos(start), y1 = cy+r*Math.sin(start);
+  const x2 = cx+r*Math.cos(end),   y2 = cy+r*Math.sin(end);
+  const ax = cx+r*Math.cos(angle), ay = cy+r*Math.sin(angle);
   const la = pct > 55 ? 1 : 0;
   const trackD = `M ${x1} ${y1} A ${r} ${r} 0 1 1 ${x2} ${y2}`;
   const arcD   = pct < 1 ? "" : `M ${x1} ${y1} A ${r} ${r} 0 ${la} 1 ${ax} ${ay}`;
   return (
-    <svg width={size} height={size} style={{ overflow: "visible" }}>
-      <path d={trackD} fill="none" stroke={T.stroke} strokeWidth={size * 0.08} strokeLinecap="round" />
-      {arcD && (
-        <path d={arcD} fill="none" stroke={color} strokeWidth={size * 0.08} strokeLinecap="round"
-          style={{ transition: "all 0.7s ease" }} />
-      )}
-      <text x={cx} y={cy + 4} textAnchor="middle" fontSize={size * 0.22} fontWeight="300"
-        fill={T.text} fontFamily="'Cormorant Garamond', serif">{pct}</text>
+    <svg width={size} height={size} style={{ overflow:"visible" }}>
+      <path d={trackD} fill="none" stroke="#E8E0F0" strokeWidth={size*0.07} strokeLinecap="round"/>
+      {arcD && <path d={arcD} fill="none" stroke={color} strokeWidth={size*0.07} strokeLinecap="round" style={{ transition:"all 0.7s ease" }}/>}
+      <text x={cx} y={cy+5} textAnchor="middle" fontSize={size*0.22} fontWeight="700" fill={color} fontFamily="'Nunito', sans-serif">{pct}</text>
     </svg>
   );
 }
 
 export default function App() {
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers]   = useState({});
   const [activeTab, setActiveTab] = useState("intro");
   const [activeCat, setActiveCat] = useState("physical");
 
   const setMark = (catId, idx, mIdx) => {
     const key = `${catId}-${idx}`;
     setAnswers(prev => {
-      if (prev[key] === mIdx) { const n = { ...prev }; delete n[key]; return n; }
+      if (prev[key] === mIdx) { const n={...prev}; delete n[key]; return n; }
       return { ...prev, [key]: mIdx };
     });
   };
@@ -170,169 +167,181 @@ export default function App() {
     return Math.round((earned / (answered.length * 2)) * 100);
   };
 
-  const totalScore = Math.round(categories.reduce((s, c) => s + catScore(c), 0) / categories.length);
+  const totalScore = Math.round(categories.reduce((s,c) => s+catScore(c), 0) / categories.length);
   const totalGrade = getGrade(totalScore);
-  const totalAnswered = categories.reduce((s, c) => s + c.items.filter((_, i) => answers[`${c.id}-${i}`] !== undefined).length, 0);
-  const totalItems = categories.reduce((s, c) => s + c.items.length, 0);
-  const pctDone = Math.round((totalAnswered / totalItems) * 100);
+  const totalAnswered = categories.reduce((s,c) => s+c.items.filter((_,i) => answers[`${c.id}-${i}`] !== undefined).length, 0);
+  const totalItems = categories.reduce((s,c) => s+c.items.length, 0);
+  const pctDone = Math.round((totalAnswered/totalItems)*100);
 
   const current = categories.find(c => c.id === activeCat);
   const currentIdx = categories.findIndex(c => c.id === activeCat);
 
-  const depAlert = categories.find(c => c.id === "mental").items.filter((it, i) => {
+  const depAlert = categories.find(c=>c.id==="mental").items.filter((it,i) => {
     if (!it.reverse) return false;
     const m = answers[`mental-${i}`];
     return m !== undefined && MARKS[m].score <= 1;
   }).length;
 
-  const S = {
-    wrap: { minHeight: "100vh", background: T.cream, color: T.text, fontFamily: "'DM Sans', sans-serif", paddingBottom: 72 },
-    serif: { fontFamily: "'Cormorant Garamond', serif" },
-    card: { background: T.card, borderRadius: 16, border: `1px solid ${T.stroke}`, boxShadow: "0 2px 16px rgba(42,31,24,0.06)" },
-    btn: (bg, color = "#fff") => ({ padding: "15px 24px", borderRadius: 12, border: "none", background: bg, color, fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.02em" }),
-  };
+  const hand = { fontFamily: "'Noto Sans KR', sans-serif" };
+  const sans = { fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 400 };
+
+  const Btn = ({ onClick, bg, color="#fff", children, style={} }) => (
+    <button onClick={onClick} style={{ padding:"14px 20px", borderRadius:50, border:"none", background:bg, color, fontSize:14, fontWeight:700, cursor:"pointer", ...sans, ...style }}>
+      {children}
+    </button>
+  );
 
   return (
-    <div style={S.wrap}>
+    <div style={{ minHeight:"100vh", background:T.bg, color:T.text, ...sans, paddingBottom:72 }}>
 
-      {/* Header */}
-      <div style={{ background: T.paper, borderBottom: `1px solid ${T.stroke}`, padding: "40px 24px 28px", textAlign: "center" }}>
-        <div style={{ fontSize: 11, letterSpacing: "0.18em", marginBottom: 10, fontWeight: 500 }}>
-          {[...'BETTER HOUR CHECKLIST'].map((ch, i) => {
-            const palette = ['#8FA87A','#9B8FB5','#7AAAB8','#B09060','#B8909A','#7A9858'];
-            return ch === ' '
-              ? <span key={i}>&nbsp;</span>
-              : <span key={i} style={{ color: palette[i % palette.length] }}>{ch}</span>;
-          })}
-        </div>
-        <h1 style={{ ...S.serif, margin: 0, fontSize: 34, fontWeight: 300, color: T.text, letterSpacing: "-0.01em", lineHeight: 1.2 }}>
-          나를 이해하고,<br /><em>나답게 살아가기</em>
-        </h1>
-        <p style={{ margin: "12px 0 0", color: T.sub, fontSize: 13, fontWeight: 300 }}>지속 가능한 웰니스를 설계하세요</p>
-        <div style={{ maxWidth: 320, margin: "20px auto 0" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 11, color: T.muted }}>
-            <span>진행률</span><span>{totalAnswered} / {totalItems}</span>
-          </div>
-          <div style={{ height: 3, background: T.stroke, borderRadius: 3, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${pctDone}%`, background: `linear-gradient(90deg,${T.sage},${T.amber})`, borderRadius: 3, transition: "width 0.5s ease" }} />
+      {/* ── Header ── */}
+      <div style={{ background:`linear-gradient(160deg, ${T.mintL} 0%, ${T.lavL} 50%, ${T.pinkL} 100%)`, padding:"40px 24px 28px", textAlign:"center", position:"relative", overflow:"hidden", borderBottom:`2px solid ${T.stroke}` }}>
+        <WavyDeco color={T.mint}/>
+        <WavyDeco color={T.pink} flip={true}/>
+        <div style={{ position:"relative", zIndex:1 }}>
+          <div style={{ ...hand, fontSize:13, letterSpacing:"0.1em", color:T.lavD, marginBottom:4 }}>✦ Better Hour ✦</div>
+          <h1 style={{ ...hand, margin:0, fontSize:38, fontWeight:700, color:T.text, lineHeight:1.2, marginBottom:4 }}>
+            <span style={{ ...(() => {
+              const palette=[T.mintD,T.lavD,T.pinkD,T.yellowD,T.mintD,T.lavD,T.pinkD,T.yellowD,T.mintD,T.lavD,T.pinkD,T.yellowD,T.mintD,T.lavD,T.pinkD,T.yellowD,T.mintD,T.lavD,T.mintD];
+              return {};
+            })() }}>
+              {[...'CHECKLIST'].map((ch,i)=>{
+                const p=[T.mintD,T.lavD,T.pinkD,T.yellowD];
+                return ch===' ' ? <span key={i}>&nbsp;</span> : <span key={i} style={{color:p[i%4]}}>{ch}</span>;
+              })}
+            </span>
+          </h1>
+          <p style={{ margin:"8px 0 0", color:T.sub, fontSize:13, fontWeight:400 }}>나를 이해하고, 나답게 살아가기 🌸</p>
+          <div style={{ maxWidth:280, margin:"16px auto 0" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", fontSize:11, color:T.muted, marginBottom:5 }}>
+              <span>진행률</span><span>{totalAnswered} / {totalItems}</span>
+            </div>
+            <div style={{ height:6, background:"rgba(255,255,255,0.5)", borderRadius:10, overflow:"hidden" }}>
+              <div style={{ height:"100%", width:`${pctDone}%`, background:`linear-gradient(90deg,${T.mint},${T.lav},${T.pink})`, borderRadius:10, transition:"width 0.5s" }}/>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: "flex", background: T.paper, borderBottom: `1px solid ${T.stroke}`, position: "sticky", top: 0, zIndex: 20 }}>
-        {["intro", "check", "result"].map(tab => {
-          const labels = { intro: "웰니스란?", check: "체크리스트", result: "분석 결과" };
-          const active = activeTab === tab;
+      {/* ── Tabs ── */}
+      <div style={{ display:"flex", background:"#fff", borderBottom:`2px solid ${T.stroke}`, position:"sticky", top:0, zIndex:20 }}>
+        {["intro","check","result"].map((tab,ti) => {
+          const labels=["웰니스란?","체크리스트","분석 결과"];
+          const tabColors=[T.mintD, T.lavD, T.pinkD];
+          const active = activeTab===tab;
           return (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{ flex: 1, padding: "14px 0", border: "none", background: "transparent", cursor: "pointer", fontSize: 12, fontWeight: active ? 500 : 400, color: active ? T.text : T.muted, borderBottom: active ? `2px solid ${T.text}` : "2px solid transparent", letterSpacing: "0.05em", fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s" }}>
-              {labels[tab].toUpperCase()}
+            <button key={tab} onClick={()=>setActiveTab(tab)} style={{ flex:1, padding:"13px 0", border:"none", background:"transparent", cursor:"pointer", ...hand, fontSize:16, fontWeight:active?700:400, color:active?tabColors[ti]:T.muted, borderBottom:active?`3px solid ${tabColors[ti]}`:"3px solid transparent", transition:"all 0.2s" }}>
+              {labels[ti]}
             </button>
           );
         })}
       </div>
 
-      <div style={{ maxWidth: 520, margin: "0 auto", padding: "0 20px" }}>
+      <div style={{ maxWidth:520, margin:"0 auto", padding:"0 16px" }}>
 
-        {/* ── INTRO ── */}
-        {activeTab === "intro" && (
-          <div style={{ paddingTop: 36 }}>
-            <div style={{ ...S.card, padding: "28px 24px", marginBottom: 20, background: T.paper }}>
-              <div style={{ fontSize: 10, letterSpacing: "0.15em", color: T.muted, marginBottom: 10 }}>ABOUT WELLNESS</div>
-              <h2 style={{ ...S.serif, margin: "0 0 14px", fontSize: 22, fontWeight: 400, color: T.text, lineHeight: 1.4 }}>
-                "단 한 시간,<br />당신의 하루를 바꾸는 경험"
-              </h2>
-              <p style={{ margin: 0, lineHeight: 1.9, color: T.sub, fontSize: 13, fontWeight: 300 }}>
-                웰니스는 단순히 <strong style={{ color: T.text, fontWeight: 500 }}>병이 없는 상태</strong>를 넘어,
-                몸과 마음이 조화롭게 균형을 이루며{" "}
-                <strong style={{ color: T.text, fontWeight: 500 }}>더 나은 하루를 능동적으로 설계</strong>하는 삶의 방식입니다.
+        {/* ════ INTRO ════ */}
+        {activeTab==="intro" && (
+          <div style={{ paddingTop:28 }}>
+            {/* About card */}
+            <div style={{ background:`linear-gradient(135deg,${T.mintL},${T.lavL})`, borderRadius:20, padding:"24px 22px", marginBottom:16, border:`2px solid ${T.mint}`, position:"relative", overflow:"hidden" }}>
+              <div style={{ ...hand, fontSize:22, color:T.lavD, marginBottom:10 }}>wellness 란? ✦</div>
+              <p style={{ margin:0, lineHeight:1.9, color:T.text, fontSize:13, fontWeight:400 }}>
+                단순히 <strong style={{ color:T.mintD }}>병이 없는 상태</strong>를 넘어, 몸과 마음이 조화롭게 균형을 이루며{" "}
+                <strong style={{ color:T.lavD }}>더 나은 하루를 능동적으로 설계</strong>하는 삶의 방식이에요 🌿
               </p>
             </div>
 
-            <div style={{ ...S.card, padding: "20px 24px", marginBottom: 20 }}>
-              <div style={{ fontSize: 10, letterSpacing: "0.15em", color: T.muted, marginBottom: 14 }}>HOW TO ANSWER</div>
-              <div style={{ display: "flex", gap: 10 }}>
-                {MARKS.map(m => (
-                  <div key={m.symbol} style={{ flex: 1, textAlign: "center", padding: "16px 8px", background: m.bg, border: `1px solid ${m.border}`, borderRadius: 12 }}>
-                    <div style={{ ...S.serif, fontSize: 28, fontWeight: 400, color: m.color, lineHeight: 1 }}>{m.symbol}</div>
-                    <div style={{ fontSize: 11, color: m.color, marginTop: 6, fontWeight: 500, letterSpacing: "0.05em" }}>{m.label}</div>
+            {/* Mark guide */}
+            <div style={{ background:"#fff", borderRadius:20, padding:"18px 20px", marginBottom:16, border:`2px solid ${T.stroke}` }}>
+              <div style={{ ...hand, fontSize:18, color:T.text, marginBottom:12 }}>how to answer ✦</div>
+              <div style={{ display:"flex", gap:10 }}>
+                {MARKS.map(m=>(
+                  <div key={m.symbol} style={{ flex:1, textAlign:"center", padding:"14px 8px", background:m.bg, border:`2px solid ${m.border}`, borderRadius:14 }}>
+                    <div style={{ fontSize:28, color:m.color, lineHeight:1 }}>{m.symbol}</div>
+                    <div style={{ fontSize:11, color:m.color, marginTop:6, fontWeight:700 }}>{m.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {categories.map(cat => (
-              <div key={cat.id} style={{ ...S.card, padding: "18px 20px", marginBottom: 10, display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: cat.light, border: `1px solid ${cat.border}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0 }}>
-                  {cat.emoji}
+            {/* Category cards */}
+            {categories.map(cat=>(
+              <div key={cat.id} style={{ background:cat.light, border:`2px solid ${cat.border}`, borderRadius:18, padding:"14px 18px", marginBottom:10, display:"flex", alignItems:"center", gap:14 }}>
+                <div style={{ fontSize:26 }}>{cat.emoji}</div>
+                <div style={{ flex:1 }}>
+                  <div style={{ ...hand, fontSize:18, color:cat.color, marginBottom:2 }}>{cat.label}</div>
+                  <div style={{ fontSize:12, color:T.sub }}>{cat.desc}</div>
+                  <div style={{ fontSize:11, color:T.muted, marginTop:2 }}>{cat.items.length}개 항목</div>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 10, letterSpacing: "0.15em", color: cat.color, marginBottom: 3, fontWeight: 500 }}>{cat.en.toUpperCase()}</div>
-                  <div style={{ ...S.serif, fontSize: 17, fontWeight: 400, color: T.text, marginBottom: 3 }}>{cat.label}</div>
-                  <div style={{ fontSize: 11, color: T.muted, fontWeight: 300 }}>{cat.items.length}개 항목</div>
-                </div>
+                <div style={{ width:8, height:8, borderRadius:"50%", background:cat.color }}/>
               </div>
             ))}
 
-            <button onClick={() => setActiveTab("check")} style={{ ...S.btn(`linear-gradient(135deg,${T.sage},#7A9068)`), width: "100%", marginTop: 12 }}>
-              체크리스트 시작하기
-            </button>
+            <Btn onClick={()=>setActiveTab("check")} bg={`linear-gradient(135deg,${T.mint},${T.lav})`} style={{ width:"100%", marginTop:8 }}>
+              체크리스트 시작하기 ✦
+            </Btn>
           </div>
         )}
 
-        {/* ── CHECK ── */}
-        {activeTab === "check" && (
-          <div style={{ paddingTop: 24 }}>
-            <div style={{ display: "flex", gap: 6, marginBottom: 20, overflowX: "auto", paddingBottom: 2 }}>
-              {categories.map(cat => {
-                const done = cat.items.every((_, i) => answers[`${cat.id}-${i}`] !== undefined);
-                const active = activeCat === cat.id;
+        {/* ════ CHECK ════ */}
+        {activeTab==="check" && (
+          <div style={{ paddingTop:20 }}>
+            {/* Category pills */}
+            <div style={{ display:"flex", gap:8, overflowX:"auto", paddingBottom:4, marginBottom:16 }}>
+              {categories.map(cat=>{
+                const done = cat.items.every((_,i)=>answers[`${cat.id}-${i}`]!==undefined);
+                const active = activeCat===cat.id;
                 return (
-                  <button key={cat.id} onClick={() => setActiveCat(cat.id)} style={{ flexShrink: 0, padding: "8px 14px", borderRadius: 20, border: `1px solid ${active ? cat.color : done ? cat.border : T.stroke}`, background: active ? cat.light : done ? cat.light + "88" : "transparent", color: active ? cat.color : done ? cat.color : T.muted, fontSize: 11, fontWeight: 500, cursor: "pointer", transition: "all 0.2s", fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.03em" }}>
-                    {cat.emoji} {cat.en}{done ? " ✓" : ""}
+                  <button key={cat.id} onClick={()=>setActiveCat(cat.id)} style={{ flexShrink:0, padding:"8px 16px", borderRadius:50, border:`2px solid ${active?cat.color:T.stroke}`, background:active?cat.light:"#fff", color:active?cat.color:T.muted, ...hand, fontSize:15, cursor:"pointer", transition:"all 0.2s" }}>
+                    {cat.emoji} {cat.label}{done?" ✓":""}
                   </button>
                 );
               })}
             </div>
 
-            <div style={{ background: current.light, border: `1px solid ${current.border}`, borderRadius: 16, padding: "20px", marginBottom: 18 }}>
-              <div style={{ fontSize: 10, letterSpacing: "0.18em", color: current.color, marginBottom: 6, fontWeight: 500 }}>{current.en.toUpperCase()}</div>
-              <div style={{ ...S.serif, fontSize: 22, fontWeight: 400, color: T.text, marginBottom: 6 }}>{current.label}</div>
-              <div style={{ fontSize: 12, color: T.wildRose, fontWeight: 300 }}>{current.desc}</div>
-              {current.note && (
-                <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${current.border}`, fontSize: 11, color: T.sub, fontWeight: 300, lineHeight: 1.7 }}>
-                  ⚠ {current.note}
-                </div>
-              )}
+            {/* Cat header */}
+            <div style={{ background:current.light, border:`2px solid ${current.border}`, borderRadius:20, padding:"18px 20px", marginBottom:16, position:"relative", overflow:"hidden" }}>
+              <WavyDeco color={current.color}/>
+              <div style={{ position:"relative", zIndex:1 }}>
+                <div style={{ ...hand, fontSize:24, color:current.color, marginBottom:4 }}>{current.emoji} {current.label}</div>
+                <div style={{ fontSize:12, color:T.pinkD, fontWeight:500 }}>{current.desc}</div>
+                {current.note && (
+                  <div style={{ marginTop:10, padding:"8px 12px", background:"rgba(255,255,255,0.6)", borderRadius:10, fontSize:11, color:T.sub, lineHeight:1.7 }}>
+                    ⚠ {current.note}
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: 14, marginBottom: 14 }}>
-              {MARKS.map(m => <span key={m.symbol} style={{ fontSize: 11, color: m.color, fontWeight: 500 }}>{m.symbol} {m.label}</span>)}
+            {/* Legend */}
+            <div style={{ display:"flex", justifyContent:"flex-end", gap:14, marginBottom:12 }}>
+              {MARKS.map(m=><span key={m.symbol} style={{ fontSize:12, color:m.color, fontWeight:700 }}>{m.symbol} {m.label}</span>)}
             </div>
 
-            {current.items.map((item, i) => {
-              const key = `${current.id}-${i}`;
-              const sel = answers[key];
-              const selM = sel !== undefined ? MARKS[sel] : null;
-              const brk = sectionBreaks[current.id]?.[i];
+            {/* Items */}
+            {current.items.map((item,i)=>{
+              const key=`${current.id}-${i}`;
+              const sel=answers[key];
+              const selM=sel!==undefined?MARKS[sel]:null;
+              const brk=sectionBreaks[current.id]?.[i];
               return (
                 <div key={i}>
                   {brk && (
-                    <div style={{ margin: "22px 0 12px", display: "flex", alignItems: "center", gap: 12 }}>
-                      <div style={{ flex: 1, height: 1, background: T.stroke }} />
-                      <span style={{ fontSize: 10, letterSpacing: "0.14em", color: T.muted, fontWeight: 500, whiteSpace: "nowrap" }}>{brk.toUpperCase()}</span>
-                      <div style={{ flex: 1, height: 1, background: T.stroke }} />
+                    <div style={{ margin:"20px 0 12px", display:"flex", alignItems:"center", gap:10 }}>
+                      <div style={{ flex:1, height:2, background:T.stroke, borderRadius:2 }}/>
+                      <span style={{ ...hand, fontSize:14, color:T.muted }}>{brk}</span>
+                      <div style={{ flex:1, height:2, background:T.stroke, borderRadius:2 }}/>
                     </div>
                   )}
-                  <div style={{ ...S.card, padding: "16px 18px", marginBottom: 10, background: selM ? selM.bg : T.card, border: `1px solid ${selM ? selM.border : T.stroke}` }}>
-                    <div style={{ fontSize: 13, color: T.textDark, lineHeight: 1.7, marginBottom: 13, fontWeight: 400, display: "flex", alignItems: "flex-start", gap: 8 }}>
-                      {item.reverse && <span style={{ flexShrink: 0, fontSize: 9, letterSpacing: "0.1em", color: T.rose, border: `1px solid ${T.rose}40`, borderRadius: 4, padding: "2px 5px", marginTop: 2 }}>역채점</span>}
-                      {item.neutral && <span style={{ flexShrink: 0, fontSize: 9, letterSpacing: "0.1em", color: T.amber, border: `1px solid ${T.amber}40`, borderRadius: 4, padding: "2px 5px", marginTop: 2 }}>참고</span>}
+                  <div style={{ background:selM?selM.bg:"#fff", border:`2px solid ${selM?selM.border:T.stroke}`, borderRadius:16, padding:"14px 16px", marginBottom:10, transition:"all 0.15s" }}>
+                    <div style={{ fontSize:13, color:T.text, lineHeight:1.75, marginBottom:12, fontWeight:400, display:"flex", alignItems:"flex-start", gap:8 }}>
+                      {item.reverse && <span style={{ flexShrink:0, fontSize:9, color:T.pinkD, border:`1px solid ${T.pink}`, borderRadius:6, padding:"2px 6px", marginTop:3, fontWeight:700 }}>역채점</span>}
+                      {item.neutral && <span style={{ flexShrink:0, fontSize:9, color:T.lavD, border:`1px solid ${T.lav}`, borderRadius:6, padding:"2px 6px", marginTop:3, fontWeight:700 }}>참고</span>}
                       {item.q}
                     </div>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      {MARKS.map((m, mIdx) => (
-                        <button key={mIdx} onClick={() => setMark(current.id, i, mIdx)} style={{ flex: 1, padding: "12px 0", borderRadius: 10, cursor: "pointer", border: `1.5px solid ${sel === mIdx ? m.color : T.stroke}`, background: sel === mIdx ? m.bg : "transparent", color: sel === mIdx ? m.color : T.stroke, fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 400, transition: "all 0.18s", transform: sel === mIdx ? "scale(1.06)" : "scale(1)" }}>
+                    <div style={{ display:"flex", gap:8 }}>
+                      {MARKS.map((m,mIdx)=>(
+                        <button key={mIdx} onClick={()=>setMark(current.id,i,mIdx)} style={{ flex:1, padding:"11px 0", borderRadius:12, cursor:"pointer", border:`2px solid ${sel===mIdx?m.color:T.stroke}`, background:sel===mIdx?m.bg:"#fff", color:sel===mIdx?m.color:T.muted, fontSize:22, fontWeight:700, transition:"all 0.15s", transform:sel===mIdx?"scale(1.07)":"scale(1)" }}>
                           {m.symbol}
                         </button>
                       ))}
@@ -342,109 +351,103 @@ export default function App() {
               );
             })}
 
-            <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-              {currentIdx > 0 && (
-                <button onClick={() => { setActiveCat(categories[currentIdx - 1].id); window.scrollTo(0, 0); }}
-                  style={{ ...S.btn("transparent", T.muted), flex: 1, border: `1px solid ${T.stroke}` }}>
-                  ← 이전
-                </button>
+            {/* Nav */}
+            <div style={{ display:"flex", gap:10, marginTop:10 }}>
+              {currentIdx>0 && (
+                <Btn onClick={()=>{setActiveCat(categories[currentIdx-1].id);window.scrollTo(0,0);}} bg="#fff" color={T.muted} style={{ flex:1, border:`2px solid ${T.stroke}` }}>← 이전</Btn>
               )}
-              {currentIdx < categories.length - 1 ? (
-                <button onClick={() => { setActiveCat(categories[currentIdx + 1].id); window.scrollTo(0, 0); }}
-                  style={{ ...S.btn(current.color), flex: 2 }}>
-                  다음 — {categories[currentIdx + 1].label} →
-                </button>
+              {currentIdx<categories.length-1 ? (
+                <Btn onClick={()=>{setActiveCat(categories[currentIdx+1].id);window.scrollTo(0,0);}} bg={current.color} style={{ flex:2 }}>
+                  다음 — {categories[currentIdx+1].label} →
+                </Btn>
               ) : (
-                <button onClick={() => setActiveTab("result")}
-                  style={{ ...S.btn(`linear-gradient(135deg,${T.sage},#7A9068)`), flex: 2 }}>
-                  결과 분석 보기 →
-                </button>
+                <Btn onClick={()=>setActiveTab("result")} bg={`linear-gradient(135deg,${T.mint},${T.pink})`} style={{ flex:2 }}>
+                  결과 보기 ✦
+                </Btn>
               )}
             </div>
           </div>
         )}
 
-        {/* ── RESULT ── */}
-        {activeTab === "result" && (
-          <div style={{ paddingTop: 32 }}>
-            <div style={{ ...S.card, padding: "32px 24px", marginBottom: 24, textAlign: "center", background: T.paper }}>
-              <div style={{ fontSize: 10, letterSpacing: "0.18em", color: T.muted, marginBottom: 16 }}>MY WELLNESS SCORE</div>
-              <ArcMeter pct={totalScore} color={totalGrade.color} size={130} />
-              <div style={{ marginTop: 16 }}>
-                <div style={{ ...S.serif, fontSize: 11, letterSpacing: "0.2em", color: totalGrade.color, fontWeight: 400 }}>{totalGrade.label.toUpperCase()}</div>
-                <div style={{ ...S.serif, fontSize: 26, fontWeight: 300, color: T.text, marginTop: 4 }}>{totalGrade.ko}</div>
-                <div style={{ fontSize: 12, color: T.muted, marginTop: 6, fontWeight: 300 }}>전체 웰니스 종합 점수</div>
+        {/* ════ RESULT ════ */}
+        {activeTab==="result" && (
+          <div style={{ paddingTop:28 }}>
+            {/* Total */}
+            <div style={{ background:`linear-gradient(135deg,${T.mintL},${T.lavL},${T.pinkL})`, borderRadius:24, padding:"30px 24px", marginBottom:20, textAlign:"center", border:`2px solid ${T.stroke}`, position:"relative", overflow:"hidden" }}>
+              <WavyDeco color={T.mint}/>
+              <WavyDeco color={T.pink} flip={true}/>
+              <div style={{ position:"relative", zIndex:1 }}>
+                <div style={{ ...hand, fontSize:18, color:T.lavD, marginBottom:14 }}>my wellness score ✦</div>
+                <ArcMeter pct={totalScore} color={totalGrade.color} size={130}/>
+                <div style={{ ...hand, fontSize:28, color:totalGrade.color, marginTop:10 }}>{totalGrade.ko}</div>
+                <div style={{ fontSize:12, color:T.sub, marginTop:4 }}>전체 웰니스 종합 점수</div>
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
-              {categories.map(cat => {
-                const pct = catScore(cat);
-                const g = getGrade(pct);
+            {/* 4 grid */}
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:20 }}>
+              {categories.map(cat=>{
+                const pct=catScore(cat); const g=getGrade(pct);
                 return (
-                  <div key={cat.id} style={{ ...S.card, padding: "20px 16px", textAlign: "center", background: cat.light, border: `1px solid ${cat.border}` }}>
-                    <div style={{ fontSize: 20, marginBottom: 8 }}>{cat.emoji}</div>
-                    <ArcMeter pct={pct} color={cat.color} size={80} />
-                    <div style={{ fontSize: 10, letterSpacing: "0.12em", color: cat.color, marginTop: 10, fontWeight: 500 }}>{cat.en.toUpperCase()}</div>
-                    <div style={{ ...S.serif, fontSize: 15, color: T.text, marginTop: 3 }}>{cat.label}</div>
-                    <div style={{ fontSize: 11, color: g.color, marginTop: 4, fontWeight: 500 }}>{g.ko}</div>
+                  <div key={cat.id} style={{ background:cat.light, border:`2px solid ${cat.border}`, borderRadius:20, padding:"18px 14px", textAlign:"center" }}>
+                    <div style={{ fontSize:22, marginBottom:6 }}>{cat.emoji}</div>
+                    <ArcMeter pct={pct} color={cat.color} size={80}/>
+                    <div style={{ ...hand, fontSize:16, color:cat.color, marginTop:8 }}>{cat.label}</div>
+                    <div style={{ fontSize:11, color:g.color, marginTop:3, fontWeight:700 }}>{g.ko}</div>
                   </div>
                 );
               })}
             </div>
 
-            {depAlert >= 3 && (
-              <div style={{ ...S.card, padding: "20px", marginBottom: 20, border: `1px solid ${T.rose}60`, background: T.roseL }}>
-                <div style={{ fontSize: 10, letterSpacing: "0.15em", color: T.rose, marginBottom: 8, fontWeight: 500 }}>MENTAL HEALTH NOTICE</div>
-                <p style={{ ...S.serif, margin: 0, fontSize: 15, color: T.text, lineHeight: 1.8, fontWeight: 400 }}>
-                  정신건강 자가 점검에서 <strong>{depAlert}개</strong> 주의 신호가 감지되었습니다.<br />
-                  정확한 판단을 위해 <strong>전문가 상담</strong>을 권장드립니다.
+            {/* Depression alert */}
+            {depAlert>=3 && (
+              <div style={{ background:T.pinkL, border:`2px solid ${T.pink}`, borderRadius:16, padding:"16px 18px", marginBottom:16 }}>
+                <div style={{ ...hand, fontSize:17, color:T.pinkD, marginBottom:8 }}>mental health notice ⚠</div>
+                <p style={{ margin:0, fontSize:13, color:T.text, lineHeight:1.8 }}>
+                  정신건강 자가 점검에서 <strong style={{color:T.pinkD}}>{depAlert}개</strong> 주의 신호가 감지되었어요. 전문가 상담을 권장드립니다 🕊️
                 </p>
               </div>
             )}
 
-            <div style={{ ...S.card, padding: "22px 20px", marginBottom: 20, background: T.amberL, border: `1px solid ${T.amber}60` }}>
-              <div style={{ fontSize: 10, letterSpacing: "0.15em", color: T.amber, marginBottom: 14, fontWeight: 500 }}>1-YEAR LIFE PLAN</div>
-              {categories.find(c => c.id === "daily").items.filter(it => it.neutral).map((item, ni) => {
-                const i = categories.find(c => c.id === "daily").items.indexOf(item);
-                const mIdx = answers[`daily-${i}`];
-                const mark = mIdx !== undefined ? MARKS[mIdx] : null;
+            {/* Life plan */}
+            <div style={{ background:T.yellowL, border:`2px solid ${T.yellow}`, borderRadius:16, padding:"18px", marginBottom:16 }}>
+              <div style={{ ...hand, fontSize:18, color:T.yellowD, marginBottom:12 }}>1-year life plan ✦</div>
+              {categories.find(c=>c.id==="daily").items.filter(it=>it.neutral).map((item,ni)=>{
+                const i=categories.find(c=>c.id==="daily").items.indexOf(item);
+                const mIdx=answers[`daily-${i}`];
+                const mark=mIdx!==undefined?MARKS[mIdx]:null;
                 return (
-                  <div key={ni} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: ni < 5 ? `1px solid ${T.amber}30` : "none" }}>
-                    <span style={{ fontSize: 12, color: T.textDark, flex: 1, paddingRight: 12, fontWeight: 400 }}>{item.q}</span>
-                    <span style={{ ...S.serif, fontSize: 20, fontWeight: 400, color: mark ? mark.color : T.stroke, minWidth: 24, textAlign: "center" }}>
-                      {mark ? mark.symbol : "—"}
-                    </span>
+                  <div key={ni} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"9px 0", borderBottom:ni<5?`1px dashed ${T.yellow}`:""  }}>
+                    <span style={{ fontSize:12, color:T.text, flex:1, paddingRight:12 }}>{item.q}</span>
+                    <span style={{ fontSize:20, fontWeight:700, color:mark?mark.color:T.muted, minWidth:24, textAlign:"center" }}>{mark?mark.symbol:"—"}</span>
                   </div>
                 );
               })}
             </div>
 
-            <div style={{ ...S.card, padding: "22px 20px", marginBottom: 20 }}>
-              <div style={{ fontSize: 10, letterSpacing: "0.15em", color: T.muted, marginBottom: 16, fontWeight: 500 }}>IMPROVEMENT PRIORITY</div>
-              {[...categories].sort((a, b) => catScore(a) - catScore(b)).map((cat, i) => {
-                const pct = catScore(cat);
-                const g = getGrade(pct);
+            {/* Priority */}
+            <div style={{ background:"#fff", border:`2px solid ${T.stroke}`, borderRadius:16, padding:"18px", marginBottom:16 }}>
+              <div style={{ ...hand, fontSize:18, color:T.lavD, marginBottom:14 }}>improvement priority ✦</div>
+              {[...categories].sort((a,b)=>catScore(a)-catScore(b)).map((cat,i)=>{
+                const pct=catScore(cat); const g=getGrade(pct);
                 return (
-                  <div key={cat.id} style={{ display: "flex", alignItems: "center", gap: 14, paddingBottom: 14, marginBottom: 14, borderBottom: i < 3 ? `1px solid ${T.stroke}` : "none" }}>
-                    <div style={{ ...S.serif, fontSize: 22, fontWeight: 300, color: T.muted, width: 22, textAlign: "right", flexShrink: 0 }}>{i + 1}</div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 11, color: cat.color, letterSpacing: "0.1em", fontWeight: 500 }}>{cat.en.toUpperCase()}</div>
-                      <div style={{ ...S.serif, fontSize: 16, color: T.text, marginTop: 2 }}>{cat.label}</div>
-                      <div style={{ height: 3, background: T.stroke, borderRadius: 3, marginTop: 8, overflow: "hidden" }}>
-                        <div style={{ height: "100%", width: `${pct}%`, background: cat.color, borderRadius: 3, transition: "width 0.7s ease" }} />
+                  <div key={cat.id} style={{ display:"flex", alignItems:"center", gap:12, paddingBottom:12, marginBottom:12, borderBottom:i<3?`1px dashed ${T.stroke}`:"" }}>
+                    <div style={{ width:28, height:28, borderRadius:"50%", background:cat.light, border:`2px solid ${cat.border}`, display:"flex", alignItems:"center", justifyContent:"center", ...hand, fontSize:16, color:cat.color, flexShrink:0 }}>{i+1}</div>
+                    <div style={{ flex:1 }}>
+                      <div style={{ ...hand, fontSize:16, color:cat.color }}>{cat.emoji} {cat.label}</div>
+                      <div style={{ height:5, background:T.stroke, borderRadius:5, marginTop:6, overflow:"hidden" }}>
+                        <div style={{ height:"100%", width:`${pct}%`, background:cat.color, borderRadius:5, transition:"width 0.7s" }}/>
                       </div>
                     </div>
-                    <div style={{ ...S.serif, fontSize: 20, fontWeight: 300, color: g.color, minWidth: 40, textAlign: "right" }}>{pct}</div>
+                    <div style={{ ...hand, fontSize:20, color:g.color, minWidth:36, textAlign:"right" }}>{pct}</div>
                   </div>
                 );
               })}
             </div>
 
-            <button onClick={() => { setAnswers({}); setActiveTab("check"); setActiveCat("physical"); window.scrollTo(0, 0); }}
-              style={{ ...S.btn("transparent", T.muted), width: "100%", border: `1px solid ${T.stroke}` }}>
-              다시 체크하기
-            </button>
+            <Btn onClick={()=>{setAnswers({});setActiveTab("check");setActiveCat("physical");window.scrollTo(0,0);}} bg="#fff" color={T.muted} style={{ width:"100%", border:`2px solid ${T.stroke}` }}>
+              🔄 다시 체크하기
+            </Btn>
           </div>
         )}
       </div>
