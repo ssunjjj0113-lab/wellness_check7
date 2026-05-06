@@ -3,14 +3,14 @@ import { useState } from "react";
 /* ── Pastel Design tokens ── */
 const T = {
   bg:       "#FAFAFA",
-  mint:     "#AACCA8",  mintL: "#E4F0E2",  mintD: "#5A8A58",
-  pink:     "#A8C8D8",  pinkL: "#DFF0F8",  pinkD: "#4A88A0",
+  mint:     "#90C0D8",  mintL: "#DFF0F8",  mintD: "#3A88A8",
+  pink:     "#E8A0B0",  pinkL: "#FCEAF0",  pinkD: "#C05070",
   yellow:   "#D8D090",  yellowL: "#F5F2D8", yellowD: "#888040",
   lav:      "#E8C0C0",  lavL:  "#F8E8E8",  lavD:  "#A06060",
   text:     "#3A3A3A",
   sub:      "#707070",
-  muted:    "#AAAAAA",
-  stroke:   "#E0E0E0",
+  muted:    "#BBBBBB",
+  stroke:   "#EBEBEB",
   card:     "#FFFFFF",
 };
 
@@ -292,7 +292,7 @@ export default function App() {
                 const done = cat.items.every((_,i)=>answers[`${cat.id}-${i}`]!==undefined);
                 const active = activeCat===cat.id;
                 return (
-                  <button key={cat.id} onClick={()=>setActiveCat(cat.id)} style={{ flexShrink:0, padding:"8px 16px", borderRadius:50, border:`2px solid ${active?cat.color:T.stroke}`, background:active?cat.light:"#fff", color:active?cat.color:T.muted, ...hand, fontSize:15, cursor:"pointer", transition:"all 0.2s" }}>
+                  <button key={cat.id} onClick={()=>setActiveCat(cat.id)} style={{ flexShrink:0, padding:"8px 16px", borderRadius:50, border:`2px solid ${active?cat.color:T.stroke}`, background:active?cat.light:"#fff", color:active?cat.color:T.muted, ...hand, fontSize:12, cursor:"pointer", transition:"all 0.2s" }}>
                     {cat.emoji} {cat.label}{done?" ✓":""}
                   </button>
                 );
