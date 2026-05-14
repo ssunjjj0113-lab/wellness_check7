@@ -136,7 +136,6 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("intro");
   const [activeCat, setActiveCat] = useState("physical");
   const [aiResult, setAiResult] = useState(null);
-  const [aiLoading, setAiLoading] = useState(false);
 
   const setMark = (catId, idx, mIdx) => {
     const key=`${catId}-${idx}`;
@@ -173,16 +172,48 @@ export default function App() {
     return m!==undefined&&MARKS[m].score===2; // ○(예) 선택 = 증상 있음
   }).length;
 
-  const fetchAI = async () => {
-    setAiLoading(true);
-    setAiResult(null);
-    try {
-      const scores=categories.map(c=>({label:c.label,score:catScore(c),grade:getGrade(catScore(c)).ko}));
-      const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scores})});
-      const data=await res.json();
-      setAiResult(data);
-    } catch(e){ setAiResult({error:true}); }
-    setAiLoading(false);
+  const generateAnalysis = () => {
+    const scores = categories.map(c => ({ id:c.id, label:c.label, en:c.en, score:catScore(c), grade:getGrade(catScore(c)).ko }));
+    const sorted = [...scores].sort((a,b) => a.score - b.score);
+    const lowest = sorted[0];
+    const highest = sorted[sorted.length-1];
+    const avg = Math.round(scores.reduce((s,c)=>s+c.score,0)/scores.length);
+
+    const summaries = {
+      high:   "전반적으로 웰니스 균형이 잘 잡혀 있어요. 꾸준히 유지해온 노력이 점수에 고스란히 드러나네요. 지금처럼 나를 잘 돌보는 습관을 이어가 보세요 🌿",
+      mid:    "전체적으로 나쁘지 않지만, 좀 더 신경 써야 할 영역이 보여요. 작은 변화부터 시작하면 충분히 더 좋아질 수 있어요. 오늘의 나를 점검했다는 것 자체가 이미 대단한 시작이에요 ✦",
+      low:    "지금 많이 지쳐있거나 균형이 무너진 구간일 수 있어요. 완벽하지 않아도 괜찮아요. 가장 힘든 영역 하나만 먼저 챙겨보는 것으로 시작해보세요 🕊️",
+    };
+
+    const adviceMap = {
+      physical: "하루 10분 걷기나 스트레칭부터 시작해보세요. 작은 움직임이 몸 전체의 리듬을 바꿔줘요. 수면 시간도 조금씩 일정하게 맞춰보는 것이 큰 도움이 돼요.",
+      mental:   "하루 5분, 조용히 자신의 감정을 들여다보는 시간을 가져보세요. 일기 쓰기나 짧은 명상이 감정 정리에 큰 도움이 될 수 있어요. 너무 스스로를 몰아붙이지 않아도 돼요.",
+      daily:    "아침 루틴 하나만 정해보세요. 일어나서 물 한 잔, 5분 스트레칭처럼 아주 작은 것부터요. 루틴이 쌓이면 하루 전체가 훨씬 안정적으로 느껴질 거예요.",
+      social:   "가까운 사람에게 짧은 메시지 하나 먼저 보내보세요. 관계는 거창한 것보다 작고 꾸준한 연결로 단단해져요. 나를 표현하는 연습도 천천히 해보세요.",
+    };
+
+    const quotes = [
+      { text:""당신 자신을 사랑하는 것은 평생의 로맨스의 시작이다."", by:"— Oscar Wilde" },
+      { text:""건강은 모든 것이 아니지만, 건강 없이는 모든 것이 아무것도 아니다."", by:"— Arthur Schopenhauer" },
+      { text:""작은 것에 충실한 사람이 큰 것에도 충실하다."", by:"— 성경, 누가복음 16:10" },
+      { text:""오늘 할 수 있는 일을 내일로 미루지 말라. 단, 오늘 쉬어야 한다면 내일로 미뤄도 된다."", by:"— Unknown" },
+      { text:""나를 돌보는 것은 이기적인 게 아니다. 비어있는 컵으로는 누구도 채울 수 없다."", by:"— Unknown" },
+      { text:""성장은 편안함 밖에서 일어난다."", by:"— Roy T. Bennett" },
+    ];
+
+    const messages = [
+      "오늘 이 체크리스트를 완성한 것만으로도, 당신은 이미 자신을 사랑하고 있어요 ✦",
+      "완벽하지 않아도 괜찮아요. 지금 이 순간의 나도 충분히 가치 있어요 ✦",
+      "작은 변화가 쌓여 큰 흐름이 돼요. 오늘의 당신을 응원해요 ✦",
+      "나를 돌보는 시간을 낸 당신, 정말 잘하고 있어요 ✦",
+    ];
+
+    const summary = avg >= 70 ? summaries.high : avg >= 45 ? summaries.mid : summaries.low;
+    const advice = adviceMap[lowest.id] || adviceMap.mental;
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    const message = messages[Math.floor(Math.random() * messages.length)];
+
+    setAiResult({ summary, advice, quote: `${quote.text} ${quote.by}`, message, lowestLabel: lowest.label, highestLabel: highest.label });
   };
 
   const serif={fontFamily:"'Cormorant Garamond',serif"};
@@ -222,7 +253,7 @@ export default function App() {
           const labels=["소개","체크리스트","결과"];
           const ac=activeTab===t;
           return (
-            <button key={t} onClick={()=>{ setActiveTab(t); if(t==="result") fetchAI(); }} style={{flex:1,padding:"14px 0",border:"none",background:"transparent",cursor:"pointer",fontSize:11,fontWeight:ac?600:400,color:ac?T.text:T.muted,borderBottom:`1.5px solid ${ac?T.text:"transparent"}`,letterSpacing:"0.08em",...sans,transition:"all 0.2s"}}>
+            <button key={t} onClick={()=>{ setActiveTab(t); if(t==="result") generateAnalysis(); }} style={{flex:1,padding:"14px 0",border:"none",background:"transparent",cursor:"pointer",fontSize:11,fontWeight:ac?600:400,color:ac?T.text:T.muted,borderBottom:`1.5px solid ${ac?T.text:"transparent"}`,letterSpacing:"0.08em",...sans,transition:"all 0.2s"}}>
               {labels[ti].toUpperCase()}
             </button>
           );
@@ -385,7 +416,7 @@ export default function App() {
                   다음 — {categories[currentIdx+1].en} →
                 </button>
               ):(
-                <button onClick={()=>{ setActiveTab("result"); fetchAI(); }} style={{flex:2,padding:"13px",background:T.text,border:"none",borderRadius:10,color:"#fff",fontSize:12,fontWeight:500,cursor:"pointer",letterSpacing:"0.05em",...sans}}>
+                <button onClick={()=>{ setActiveTab("result"); generateAnalysis(); }} style={{flex:2,padding:"13px",background:T.text,border:"none",borderRadius:10,color:"#fff",fontSize:12,fontWeight:500,cursor:"pointer",letterSpacing:"0.05em",...sans}}>
                   결과 보기 →
                 </button>
               )}
@@ -478,17 +509,14 @@ export default function App() {
             {/* AI 분석 */}
             <div style={{background:T.card,borderRadius:14,padding:"20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
               <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>AI WELLNESS ANALYSIS</div>
-              {aiLoading&&(
-                <div style={{textAlign:"center",padding:"20px 0",fontSize:12,color:T.sub,fontWeight:300,...sans}}>분석 중이에요... ✨</div>
-              )}
-              {!aiLoading&&!aiResult&&(
+              {!aiResult&&(
                 <div style={{textAlign:"center",padding:"8px 0"}}>
-                  <button onClick={fetchAI} style={{padding:"11px 24px",background:T.text,color:"#fff",border:"none",borderRadius:8,fontSize:11,fontWeight:500,cursor:"pointer",letterSpacing:"0.08em",...sans}}>
-                    AI 분석 받기
+                  <button onClick={generateAnalysis} style={{padding:"11px 24px",background:T.text,color:"#fff",border:"none",borderRadius:8,fontSize:11,fontWeight:500,cursor:"pointer",letterSpacing:"0.08em",...sans}}>
+                    분석 보기
                   </button>
                 </div>
               )}
-              {aiResult&&!aiResult.error&&(
+              {aiResult&&(
                 <div>
                   <p style={{fontSize:13,color:T.text,lineHeight:1.9,margin:"0 0 18px",fontWeight:300,...sans}}>{aiResult.summary}</p>
                   <div style={{borderTop:`1px solid ${T.stroke}`,paddingTop:16}}>
@@ -505,11 +533,7 @@ export default function App() {
                   </div>
                 </div>
               )}
-              {aiResult?.error&&(
-                <div style={{textAlign:"center",padding:"8px 0",fontSize:12,color:T.muted,...sans}}>
-                  분석을 불러오지 못했어요. <span onClick={fetchAI} style={{cursor:"pointer",color:T.roseD,fontWeight:600}}>다시 시도</span>
-                </div>
-              )}
+
             </div>
 
             <button onClick={()=>{setAnswers({});setActiveTab("intro");setActiveCat("physical");setAiResult(null);window.scrollTo(0,0);}} style={{
