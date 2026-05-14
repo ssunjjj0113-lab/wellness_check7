@@ -170,7 +170,7 @@ export default function App() {
   const depAlert=categories.find(c=>c.id==="mental").items.filter((it,i)=>{
     if(!it.reverse) return false;
     const m=answers[`mental-${i}`];
-    return m!==undefined&&MARKS[m].score<=1;
+    return m!==undefined&&MARKS[m].score===2; // ○(예) 선택 = 증상 있음
   }).length;
 
   const fetchAI = async () => {
@@ -406,7 +406,7 @@ export default function App() {
               <div style={{fontSize:11,color:T.muted,marginTop:6,fontWeight:300,...sans}}>전체 웰니스 종합 점수</div>
             </div>
 
-            {depAlert>=3&&(
+            {depAlert>=5&&(
               <div style={{background:T.roseL,border:`1px solid ${T.rose}`,borderRadius:12,padding:"16px 18px",marginBottom:16}}>
                 <div style={{fontSize:10,fontWeight:600,color:T.roseD,letterSpacing:"0.12em",marginBottom:8,...sans}}>MENTAL HEALTH NOTICE</div>
                 <p style={{fontSize:13,color:T.text,lineHeight:1.8,margin:0,fontWeight:300,...sans}}>정신건강 자가 점검에서 <strong style={{fontWeight:600}}>{depAlert}개</strong> 주의 신호가 감지되었어요. 전문가 상담을 권장드립니다.</p>
