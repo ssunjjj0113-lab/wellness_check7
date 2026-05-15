@@ -71,7 +71,7 @@ const categories = [
       {q:"일반적으로 가족·친구·동거인과 긍정적인 교류가 있다"},
       {q:"일반적으로 하루 중 의미 있는 대화를 한 명 이상과 나눈다"},
       {q:"1년 이내 군 입대 계획이 있다", neutral:true},
-      {q:"1년 이내 해외 유학 또는 어학연수 계획이 있다", neutral:true},
+      {q:"1년 이내에 해외로 떠날 생각이 있다 (여행, 유학, 연수 등)", neutral:true},
       {q:"1년 이내 이사 또는 독립 계획이 있다", neutral:true},
       {q:"1년 이내 취업 또는 이직 계획이 있다", neutral:true},
       {q:"1년 이내 결혼 또는 동거 계획이 있다", neutral:true},
@@ -138,7 +138,7 @@ export default function App() {
   const [aiResult, setAiResult] = useState(null);
 
   const setMark = (catId, idx, mIdx) => {
-    const key=`${catId}-${idx}`;
+    const key=catId + "-" + idx;
     setAnswers(prev=>{
       if(prev[key]===mIdx){const n={...prev};delete n[key];return n;}
       return {...prev,[key]:mIdx};
@@ -147,10 +147,10 @@ export default function App() {
 
   const catScore = (cat) => {
     const sc=cat.items.filter(it=>!it.neutral);
-    const an=sc.filter(it=>answers[`${cat.id}-${cat.items.indexOf(it)}`]!==undefined);
+    const an=sc.filter(it=>answers[cat.id + "-" + cat.items.indexOf(it)]!==undefined);
     if(!an.length) return 0;
     const e=sc.reduce((s,it)=>{
-      const m=answers[`${cat.id}-${cat.items.indexOf(it)}`];
+      const m=answers[cat.id + "-" + cat.items.indexOf(it)];
       if(m===undefined) return s;
       return s+(it.reverse?2-MARKS[m].score:MARKS[m].score);
     },0);
@@ -159,7 +159,32 @@ export default function App() {
 
   const totalScore=Math.round(categories.reduce((s,c)=>s+catScore(c),0)/categories.length);
   const totalGrade=getGrade(totalScore);
-  const totalAnswered=categories.reduce((s,c)=>s+c.items.filter((_,i)=>answers[`${c.id}-${i}`]!==undefined).length,0);
+
+  const catRatio = (cat) => {
+    const items = cat.items.filter(it=>!it.neutral);
+    const answered = items.filter(it=>answers[cat.id+"-"+cat.items.indexOf(it)]!==undefined);
+    if(!answered.length) return {o:0,t:0,x:0,total:0};
+    let o=0,t=0,x=0;
+    answered.forEach(it=>{
+      const m=answers[cat.id+"-"+cat.items.indexOf(it)];
+      if(MARKS[m].score===2) o++;
+      else if(MARKS[m].score===1) t++;
+      else x++;
+    });
+    const total=answered.length;
+    return {o:Math.round(o/total*100),t:Math.round(t/total*100),x:Math.round(x/total*100),oN:o,tN:t,xN:x,total};
+  };
+
+  const totalRatio = () => {
+    let o=0,t=0,x=0,total=0;
+    categories.forEach(cat=>{
+      const r=catRatio(cat);
+      o+=r.oN; t+=r.tN; x+=r.xN; total+=r.total;
+    });
+    if(!total) return {o:0,t:0,x:0,total:0};
+    return {o:Math.round(o/total*100),t:Math.round(t/total*100),x:Math.round(x/total*100),oN:o,tN:t,xN:x,total};
+  };
+  const totalAnswered=categories.reduce((s,c)=>s+c.items.filter((_,i)=>answers[c.id + "-" + i]!==undefined).length,0);
   const totalItems=categories.reduce((s,c)=>s+c.items.length,0);
   const pctDone=Math.round((totalAnswered/totalItems)*100);
 
@@ -168,7 +193,7 @@ export default function App() {
 
   const depAlert=categories.find(c=>c.id==="mental").items.filter((it,i)=>{
     if(!it.reverse) return false;
-    const m=answers[`mental-${i}`];
+    const m=answers["mental-" + i];
     return m!==undefined&&MARKS[m].score===2; // ○(예) 선택 = 증상 있음
   }).length;
 
@@ -178,6 +203,7 @@ export default function App() {
     const lowest = sorted[0];
     const highest = sorted[sorted.length-1];
     const avg = Math.round(scores.reduce((s,c)=>s+c.score,0)/scores.length);
+    const tr = totalRatio();
 
     const summaries = {
       high:   "전반적으로 웰니스 균형이 잘 잡혀 있어요. 꾸준히 유지해온 노력이 점수에 고스란히 드러나네요. 지금처럼 나를 잘 돌보는 습관을 이어가 보세요 🌿",
@@ -213,7 +239,7 @@ export default function App() {
     const quote = quotes[Math.floor(Math.random() * quotes.length)];
     const message = messages[Math.floor(Math.random() * messages.length)];
 
-    setAiResult({ summary, advice, quote: `${quote.text} ${quote.by}`, message, lowestLabel: lowest.label, highestLabel: highest.label });
+    setAiResult({ summary, advice, quote: quote.text + " " + quote.by, message, lowestLabel: lowest.label, highestLabel: highest.label });
   };
 
   const serif={fontFamily:"'Cormorant Garamond',serif"};
@@ -321,7 +347,7 @@ export default function App() {
             {/* cat selector */}
             <div style={{display:"flex",gap:6,overflowX:"auto",marginBottom:22,paddingBottom:2}}>
               {categories.map(cat=>{
-                const done=cat.items.every((_,i)=>answers[`${cat.id}-${i}`]!==undefined);
+                const done=cat.items.every((_,i)=>answers[cat.id + "-" + i]!==undefined);
                 const ac=activeCat===cat.id;
                 return (
                   <button key={cat.id} onClick={()=>setActiveCat(cat.id)} style={{
@@ -428,14 +454,27 @@ export default function App() {
         {activeTab==="result" && (
           <div style={{paddingTop:32}}>
 
-            {/* total score */}
-            <div style={{background:T.card,borderRadius:18,padding:"28px 24px",marginBottom:20,textAlign:"center",border:`1px solid ${T.stroke}`,boxShadow:"0 2px 16px rgba(0,0,0,0.04)"}}>
-              <div style={{fontSize:10,letterSpacing:"0.2em",color:T.muted,fontWeight:500,marginBottom:16,...sans}}>MY WELLNESS SCORE</div>
-              <ArcMeter pct={totalScore} color={totalGrade.color} size={120}/>
-              <div style={{...serif,fontSize:11,letterSpacing:"0.2em",color:totalGrade.color,fontWeight:400,marginTop:12}}>{totalGrade.label.toUpperCase()}</div>
-              <div style={{...serif,fontSize:28,fontWeight:400,color:T.text,marginTop:4,fontStyle:"italic"}}>{totalGrade.ko}</div>
-              <div style={{fontSize:11,color:T.muted,marginTop:6,fontWeight:300,...sans}}>전체 웰니스 종합 점수</div>
+            {/* 전체 비율 */}
+            {(()=>{const tr=totalRatio();return(
+            <div style={{background:T.card,borderRadius:18,padding:"22px 20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
+              <div style={{fontSize:10,letterSpacing:"0.2em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>전체 응답 비율</div>
+              {[{sym:"○",color:T.sageD,bg:T.sageL,val:tr.o,n:tr.oN},{sym:"△",color:T.yellowD,bg:T.yellowL,val:tr.t,n:tr.tN},{sym:"✕",color:T.roseD,bg:T.roseL,val:tr.x,n:tr.xN}].map(r=>(
+                <div key={r.sym} style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                  <span style={{...serif,fontSize:16,color:r.color,width:18,textAlign:"center"}}>{r.sym}</span>
+                  <div style={{flex:1,background:T.stroke,borderRadius:3,height:7,overflow:"hidden"}}>
+                    <div style={{height:"100%",width:r.val+"%",background:r.bg,borderRadius:3,transition:"width 0.7s",border:"1px solid "+r.color+"50"}}/>
+                  </div>
+                  <span style={{fontSize:12,fontWeight:500,color:r.color,minWidth:32,textAlign:"right"}}>{r.val}%</span>
+                  <span style={{fontSize:11,color:T.muted,minWidth:20}}>{r.n}개</span>
+                </div>
+              ))}
+              <div style={{display:"flex",height:8,borderRadius:4,overflow:"hidden",marginTop:12}}>
+                <div style={{width:tr.o+"%",background:T.sage,transition:"width 0.7s"}}/>
+                <div style={{width:tr.t+"%",background:T.yellow,transition:"width 0.7s"}}/>
+                <div style={{width:tr.x+"%",background:T.rose,transition:"width 0.7s"}}/>
+              </div>
             </div>
+            );})()}
 
             {depAlert>=5&&(
               <div style={{background:T.roseL,border:`1px solid ${T.rose}`,borderRadius:12,padding:"16px 18px",marginBottom:16}}>
@@ -444,29 +483,38 @@ export default function App() {
               </div>
             )}
 
-            {/* 4 scores */}
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:20}}>
+            {/* 영역별 비율 */}
+            <div style={{background:T.card,borderRadius:14,padding:"18px 20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
+              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>영역별 응답 분포</div>
               {categories.map(cat=>{
-                const p=catScore(cat),g=getGrade(p);
+                const r=catRatio(cat);
                 return (
-                  <div key={cat.id} style={{background:T.card,borderRadius:14,padding:"18px 14px",border:`1px solid ${T.stroke}`,boxShadow:"0 1px 8px rgba(0,0,0,0.03)"}}>
-                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-                      <div style={{width:24,height:24,borderRadius:"50%",background:cat.light,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:cat.color,...sans}}>{cat.num}</div>
-                      <div style={{fontSize:9,color:T.muted,letterSpacing:"0.06em",...sans}}>{cat.tag}</div>
+                  <div key={cat.id} style={{marginBottom:14}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:5}}>
+                      <div style={{display:"flex",alignItems:"center",gap:8}}>
+                        <div style={{width:22,height:22,borderRadius:"50%",background:cat.light,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:cat.color,...sans}}>{cat.num}</div>
+                        <span style={{...serif,fontSize:15,fontWeight:400,color:cat.color,fontStyle:"italic"}}>{cat.en}</span>
+                        <span style={{fontSize:11,color:T.sub,...sans}}>{cat.label}</span>
+                      </div>
+                      <span style={{fontSize:11,color:T.sageD,fontWeight:500,...sans}}>○ {r.o}%</span>
                     </div>
-                    <div style={{...serif,fontSize:22,fontWeight:400,color:cat.color,fontStyle:"italic",marginBottom:4}}>{cat.en}</div>
-                    <div style={{fontSize:12,fontWeight:600,color:T.text,...sans,marginBottom:10}}>{cat.label}</div>
-                    <div style={{display:"flex",alignItems:"baseline",gap:4,marginBottom:8}}>
-                      <span style={{...serif,fontSize:32,fontWeight:400,color:g.color,lineHeight:1}}>{p}</span>
-                      <span style={{fontSize:11,color:T.muted,...sans}}>/100</span>
+                    <div style={{display:"flex",height:7,borderRadius:4,overflow:"hidden"}}>
+                      <div style={{width:r.o+"%",background:T.sage,transition:"width 0.7s"}}/>
+                      <div style={{width:r.t+"%",background:T.yellow,transition:"width 0.7s"}}/>
+                      <div style={{width:r.x+"%",background:T.rose,transition:"width 0.7s"}}/>
                     </div>
-                    <div style={{height:2,background:T.stroke,borderRadius:2,overflow:"hidden"}}>
-                      <div style={{height:"100%",width:`${p}%`,background:cat.accent,borderRadius:2,transition:"width 0.7s"}}/>
+                    <div style={{display:"flex",gap:10,marginTop:4}}>
+                      <span style={{fontSize:10,color:T.sageD,...sans}}>○ {r.oN}개</span>
+                      <span style={{fontSize:10,color:T.yellowD,...sans}}>△ {r.tN}개</span>
+                      <span style={{fontSize:10,color:T.roseD,...sans}}>✕ {r.xN}개</span>
                     </div>
-                    <div style={{fontSize:10,color:g.color,marginTop:6,fontWeight:500,letterSpacing:"0.06em",...sans}}>{g.label.toUpperCase()}</div>
                   </div>
                 );
               })}
+              <div style={{display:"flex",gap:14,paddingTop:10,borderTop:`1px solid ${T.stroke}`,marginTop:4}}>
+                <span style={{fontSize:10,color:T.sageD,...sans}}>● ○ 높을수록 좋음</span>
+                <span style={{fontSize:10,color:T.roseD,...sans}}>● ✕ 높으면 집중 필요</span>
+              </div>
             </div>
 
             {/* life plan */}
@@ -474,7 +522,7 @@ export default function App() {
               <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>1-YEAR LIFE PLAN</div>
               {categories.find(c=>c.id==="daily").items.filter(it=>it.neutral).map((item,ni)=>{
                 const i=categories.find(c=>c.id==="daily").items.indexOf(item);
-                const mIdx=answers[`daily-${i}`];
+                const mIdx=answers["daily-" + i];
                 const m=mIdx!==undefined?MARKS[mIdx]:null;
                 return (
                   <div key={ni} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"9px 0",borderBottom:ni<5?`1px solid ${T.stroke}`:""}}>
@@ -485,22 +533,29 @@ export default function App() {
               })}
             </div>
 
-            {/* priority */}
+            {/* 집중 필요 영역 */}
             <div style={{background:T.card,borderRadius:14,padding:"20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
-              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:16,...sans}}>IMPROVEMENT PRIORITY</div>
-              {[...categories].sort((a,b)=>catScore(a)-catScore(b)).map((cat,i)=>{
-                const p=catScore(cat),g=getGrade(p);
+              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:16,...sans}}>집중이 필요한 영역</div>
+              {[...categories].sort((a,b)=>catRatio(b).x-catRatio(a).x).map((cat,i)=>{
+                const r=catRatio(cat);
                 return (
-                  <div key={cat.id} style={{display:"flex",alignItems:"center",gap:14,paddingBottom:14,marginBottom:14,borderBottom:i<3?`1px solid ${T.stroke}`:""}}>
-                    <div style={{...serif,fontSize:20,fontWeight:400,color:T.muted,width:20,textAlign:"right",flexShrink:0}}>{i+1}</div>
+                  <div key={cat.id} style={{display:"flex",alignItems:"center",gap:12,paddingBottom:12,marginBottom:12,borderBottom:i<3?`1px solid ${T.stroke}`:""}}>
+                    <div style={{...serif,fontSize:18,fontWeight:400,color:T.muted,width:18,flexShrink:0}}>{i+1}</div>
                     <div style={{flex:1}}>
-                      <div style={{...serif,fontSize:16,fontWeight:400,color:cat.color,fontStyle:"italic"}}>{cat.en}</div>
-                      <div style={{fontSize:12,color:T.sub,...sans,marginTop:2,marginBottom:8}}>{cat.label}</div>
-                      <div style={{height:2,background:T.stroke,borderRadius:2,overflow:"hidden"}}>
-                        <div style={{height:"100%",width:`${p}%`,background:cat.accent,borderRadius:2,transition:"width 0.7s"}}/>
+                      <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
+                        <span style={{...serif,fontSize:15,fontWeight:400,color:cat.color,fontStyle:"italic"}}>{cat.en}</span>
+                        <span style={{fontSize:11,color:T.sub,...sans}}>{cat.label}</span>
+                      </div>
+                      <div style={{display:"flex",height:5,borderRadius:3,overflow:"hidden"}}>
+                        <div style={{width:r.o+"%",background:T.sage}}/>
+                        <div style={{width:r.t+"%",background:T.yellow}}/>
+                        <div style={{width:r.x+"%",background:T.rose}}/>
                       </div>
                     </div>
-                    <div style={{...serif,fontSize:22,fontWeight:400,color:g.color,minWidth:40,textAlign:"right"}}>{p}</div>
+                    <div style={{textAlign:"right",flexShrink:0}}>
+                      <div style={{fontSize:13,fontWeight:500,color:T.roseD,...sans}}>✕ {r.x}%</div>
+                      <div style={{fontSize:10,color:T.sageD,...sans}}>○ {r.o}%</div>
+                    </div>
                   </div>
                 );
               })}
