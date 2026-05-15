@@ -219,12 +219,12 @@ export default function App() {
     };
 
     const quotes = [
-      { text:""당신 자신을 사랑하는 것은 평생의 로맨스의 시작이다."", by:"— Oscar Wilde" },
-      { text:""건강은 모든 것이 아니지만, 건강 없이는 모든 것이 아무것도 아니다."", by:"— Arthur Schopenhauer" },
-      { text:""작은 것에 충실한 사람이 큰 것에도 충실하다."", by:"— 성경, 누가복음 16:10" },
-      { text:""오늘 할 수 있는 일을 내일로 미루지 말라. 단, 오늘 쉬어야 한다면 내일로 미뤄도 된다."", by:"— Unknown" },
-      { text:""나를 돌보는 것은 이기적인 게 아니다. 비어있는 컵으로는 누구도 채울 수 없다."", by:"— Unknown" },
-      { text:""성장은 편안함 밖에서 일어난다."", by:"— Roy T. Bennett" },
+      { text:'당신 자신을 사랑하는 것은 평생의 로맨스의 시작이다.', by:'— Oscar Wilde' },
+      { text:'건강은 모든 것이 아니지만, 건강 없이는 모든 것이 아무것도 아니다.', by:'— Arthur Schopenhauer' },
+      { text:'작은 것에 충실한 사람이 큰 것에도 충실하다.', by:'— 성경, 누가복음 16:10' },
+      { text:'오늘 할 수 있는 일을 내일로 미루지 말라. 단, 오늘 쉬어야 한다면 내일로 미뤄도 된다.', by:'— Unknown' },
+      { text:'나를 돌보는 것은 이기적인 게 아니다. 비어있는 컵으로는 누구도 채울 수 없다.', by:'— Unknown' },
+      { text:'성장은 편안함 밖에서 일어난다.', by:'— Roy T. Bennett' },
     ];
 
     const messages = [
