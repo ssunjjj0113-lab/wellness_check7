@@ -136,6 +136,9 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("intro");
   const [activeCat, setActiveCat] = useState("physical");
   const [aiResult, setAiResult] = useState(null);
+  const today = new Date().toISOString().split("T")[0];
+  const [userName, setUserName] = useState("");
+  const [checkDate, setCheckDate] = useState(today);
 
   const setMark = (catId, idx, mIdx) => {
     const key=catId + "-" + idx;
@@ -291,6 +294,30 @@ export default function App() {
         {/* ═══ INTRO ═══ */}
         {activeTab==="intro" && (
           <div style={{paddingTop:36}}>
+            {/* 이름 & 날짜 입력 */}
+            <div style={{background:T.card,borderRadius:14,padding:"18px 20px",marginBottom:20,border:`1px solid ${T.stroke}`}}>
+              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>MY INFO</div>
+              <div style={{marginBottom:12}}>
+                <div style={{fontSize:11,color:T.sub,fontWeight:500,marginBottom:6,...sans}}>이름</div>
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={e=>setUserName(e.target.value)}
+                  placeholder="이름을 입력해주세요"
+                  style={{width:"100%",padding:"10px 14px",border:`1px solid ${T.stroke}`,borderRadius:8,fontSize:13,color:T.text,background:T.bg,outline:"none",...sans}}
+                />
+              </div>
+              <div>
+                <div style={{fontSize:11,color:T.sub,fontWeight:500,marginBottom:6,...sans}}>날짜</div>
+                <input
+                  type="date"
+                  value={checkDate}
+                  onChange={e=>setCheckDate(e.target.value)}
+                  style={{width:"100%",padding:"10px 14px",border:`1px solid ${T.stroke}`,borderRadius:8,fontSize:13,color:T.text,background:T.bg,outline:"none",...sans}}
+                />
+              </div>
+            </div>
+
             {/* About Wellness — 따뜻한 인트로 */}
             <div style={{marginBottom:28}}>
               <div style={{fontSize:10,letterSpacing:"0.2em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>ABOUT WELLNESS</div>
@@ -453,6 +480,20 @@ export default function App() {
         {/* ═══ RESULT ═══ */}
         {activeTab==="result" && (
           <div style={{paddingTop:32}}>
+
+            {/* 이름/날짜 표시 */}
+            {(userName||checkDate)&&(
+              <div style={{background:T.card,borderRadius:12,padding:"14px 18px",marginBottom:14,border:`1px solid ${T.stroke}`,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                {userName&&<div>
+                  <div style={{fontSize:9,letterSpacing:"0.15em",color:T.muted,fontWeight:500,marginBottom:3,...sans}}>NAME</div>
+                  <div style={{...serif,fontSize:18,fontWeight:400,color:T.text,fontStyle:"italic"}}>{userName}</div>
+                </div>}
+                {checkDate&&<div style={{textAlign:"right"}}>
+                  <div style={{fontSize:9,letterSpacing:"0.15em",color:T.muted,fontWeight:500,marginBottom:3,...sans}}>DATE</div>
+                  <div style={{fontSize:12,color:T.sub,fontWeight:400,...sans}}>{checkDate}</div>
+                </div>}
+              </div>
+            )}
 
             {/* 전체 비율 */}
             {(()=>{const tr=totalRatio();return(
