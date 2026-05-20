@@ -9,6 +9,8 @@ const T = {
   blue:    "#A0C0D8",  blueL:  "#EAF2F8",  blueD:  "#4078A0",
   sage:    "#A8C8A0",  sageL:  "#EAF4E8",  sageD:  "#508848",
   yellow:  "#C8B870",  yellowL:"#F5EFD8",  yellowD:"#907830",
+  lav:     "#B8A8C8",  lavL:   "#EFE7F2",  lavD:   "#6858A0",
+  gray:    "#C8C0BB",  grayL:  "#EFECE8",  grayD:  "#6F6660",
   text:    "#3A3535",
   sub:     "#888080",
   muted:   "#BBBBBB",
@@ -26,84 +28,79 @@ const categories = [
     en:"Physical", color:T.roseD, light:T.roseL, border:T.rose, accent:T.rose,
     desc:"몸의 건강을 능동적으로 관리하는 것",
     items:[
-      {q:"하루 30분 이상 신체 활동(운동, 걷기 등)을 한다"},
-      {q:"하루 7~8시간 수면을 취한다"},
-      {q:"균형 잡힌 식사를 하루 3끼 한다"},
-      {q:"물을 하루 1.5L 이상 마신다"},
-      {q:"정기적인 건강검진을 받는다"},
-      {q:"음주·흡연을 하지 않거나 절제하고 있다"},
-      {q:"몸의 이상 신호(통증, 피로 등)를 무시하지 않고 대응한다"},
-      {q:"하루 중 스트레칭이나 가벼운 움직임을 의식적으로 한다"},
+      {q:"주 3회 이상, 하루 30분 이상의 규칙적인 신체 활동(운동, 산책 등)을 하고 있다"},
+      {q:"매일 7~8시간 정도의 양질의 수면을 취하고, 기상 시 개운하다"},
+      {q:"인스턴트를 줄이고 영양을 골고루 갖춘 식사를 규칙적으로 한다"},
+      {q:"음주·흡연을 하지 않거나, 스스로 정한 기준 내에서 절제하고 있다"},
+      {q:"몸의 이상 신호(통증, 만성 피로 등)가 올 때 휴식을 취하거나 병원을 찾는다"},
+      {q:"일상 속에서 스트레칭이나 가벼운 움직임을 의식적으로 실천한다"},
     ],
   },
-  { id:"mental", num:"02", emoji:"🕊️", label:"정신건강", tag:"마인드솔루션",
+  { id:"mental", num:"02", emoji:"🕊️", label:"정신·정서적 웰니스", tag:"마인드솔루션",
     en:"Mental", color:T.blueD, light:T.blueL, border:T.blue, accent:T.blue,
     desc:"감정·심리적 균형과 정신건강 전반을 점검하는 것",
-    note:"역채점 항목은 전문가 진단이 아닙니다. 이상 신호가 다수일 경우 전문의 상담을 권장합니다.",
+    note:"역채점 항목은 전문가 진단이 아닙니다. 이상 신호가 많을 경우 전문의 상담을 권장합니다.",
     items:[
-      {q:"스트레스를 인식하고 건강하게 해소할 수 있다"},
-      {q:"명상 또는 마음챙김을 실천한다"},
-      {q:"부정적인 감정을 건강하게 표현할 수 있다"},
-      {q:"취미나 즐거운 활동에 시간을 쓴다"},
-      {q:"자기 자신에게 친절하다 (자기 비판을 줄인다)"},
-      {q:"최근 2주간 대부분의 시간 기분이 가라앉거나 우울했다", reverse:true},
-      {q:"최근 2주간 일상 활동에 대한 흥미나 즐거움이 줄었다", reverse:true},
-      {q:"이유 없이 피로하거나 에너지가 부족하다고 느꼈다", reverse:true},
-      {q:"수면에 문제가 있다 (너무 많이 자거나, 잘 못 잔다)", reverse:true},
-      {q:"집중력이 떨어지거나 결정을 내리기 어렵다고 느꼈다", reverse:true},
-      {q:"자신이 쓸모없다는 느낌이나 과도한 죄책감을 느꼈다", reverse:true},
-      {q:"죽고 싶다거나 스스로를 해치고 싶다는 생각이 든 적 있다", reverse:true},
-      {q:"평소보다 불안하거나 초조한 감정이 자주 든다", reverse:true},
-      {q:"타인에게 피해를 준다는 생각이 자주 든다", reverse:true},
-      {q:"현재 정신건강 전문가에게 상담·치료 중이다", neutral:true},
+      {q:"외부의 자극에서 벗어나, 내 감정과 생각을 정리하는 혼자만의 시간을 가지는 편이다"},
+      {q:"부정적인 마음이 정리되면 삶의 의미나 긍정적인 방향성을 찾아내는 편이다"},
+      {q:"마음이 힘들 때 내가 느끼는 감정이 무엇이고 원인이 무엇인지 명확하게 표현할 수 있다"},
+      {q:"행동이나 중요한 결정을 감정에 휩쓸리지 않고 이성적으로 선택한다"},
+      {q:"마음 놓고 온전히 쉬거나 여가를 즐기는 동안에도 마음 한편이 불안하거나 죄책감이 든다", reverse:true},
+      {q:"취미나 여가 활동을 할 때는 즐겁지만, 끝나고 나면 금방 공허함이나 무기력함이 밀려온다", reverse:true},
+      {q:"현재 혹은 과거에 정신건강 및 심리 안정을 위해 전문가의 도움(상담·치료)을 받아본 적이 있다", neutral:true},
     ],
   },
-  { id:"daily", num:"03", emoji:"☀️", label:"일상 계획", tag:"루틴솔루션",
+  { id:"routine", num:"03", emoji:"☀️", label:"일상 루틴 및 점검", tag:"루틴솔루션",
     en:"Routine", color:T.sageD, light:T.sageL, border:T.sage, accent:T.sage,
-    desc:"주간 루틴과 1년 이내 주요 생활 변화 계획 파악",
-    note:"생활 계획 항목은 계획이 있으면 ○, 가능성 있으면 △, 없으면 ✕로 표시해 주세요.",
+    desc:"일상 리듬과 자기 시간 관리 점검",
     items:[
-      {q:"일반적으로 규칙적인 기상·취침 시간을 유지한다"},
-      {q:"일반적으로 낮 시간 대부분을 생산적인 활동(학업·업무·운동 등)에 쓴다"},
-      {q:"일반적으로 세끼 식사를 거르지 않고 규칙적으로 먹는다"},
-      {q:"일반적으로 스마트폰·SNS 사용을 하루 3시간 이내로 조절한다"},
-      {q:"일반적으로 나만의 여가·휴식 시간이 있다"},
-      {q:"일반적으로 가족·친구·동거인과 긍정적인 교류가 있다"},
-      {q:"일반적으로 하루 중 의미 있는 대화를 한 명 이상과 나눈다"},
-      {q:"1년 이내 군 입대 계획이 있다", neutral:true},
-      {q:"1년 이내에 해외로 떠날 생각이 있다 (여행, 유학, 연수 등)", neutral:true},
-      {q:"1년 이내 이사 또는 독립 계획이 있다", neutral:true},
-      {q:"1년 이내 취업 또는 이직 계획이 있다", neutral:true},
-      {q:"1년 이내 결혼 또는 동거 계획이 있다", neutral:true},
-      {q:"1년 이내 학업(입학·졸업 등) 관련 주요 변화가 있다", neutral:true},
+      {q:"평일과 주말 모두 규칙적인 기상 및 취침 시간을 유지하는 편이다"},
+      {q:"하루 중 대부분의 시간을 나에게 생산적이거나 의미 있는 활동으로 채운다"},
+      {q:"타인이나 환경에 휘둘리지 않고, 오롯이 나만을 위해 쓰는 고정적인 시간이 있다"},
+      {q:"운동, 자격증, 동아리, 알바 등 나를 위해 주 3회 이상 고정적으로 시간을 내는 활동이 있다"},
+      {q:"최근 스마트폰, 늦잠 등 여러 이유로 생활 리듬이 깨졌다고 느낀다", reverse:true},
+      {q:"하루를 마무리지을 때 오늘 하루 보낸 시간에 대해 대체로 만족한다"},
     ],
   },
-  { id:"social", num:"04", emoji:"🌸", label:"사회적 웰니스", tag:"커넥션솔루션",
-    en:"Connection", color:T.yellowD, light:T.yellowL, border:T.yellow, accent:T.yellow,
-    desc:"건강한 인간관계, 소속감, 일·학업의 의미를 통합적으로 점검",
+  { id:"social", num:"04", emoji:"🌸", label:"사회적 관계", tag:"커넥션솔루션",
+    en:"Social", color:T.yellowD, light:T.yellowL, border:T.yellow, accent:T.yellow,
+    desc:"건강한 인간관계와 소속감 점검",
     items:[
-      {q:"힘들 때 솔직하게 털어놓을 수 있는 사람이 1명 이상 있다"},
-      {q:"최근 한 달 내 친구 또는 가족과 의미 있는 시간을 보낸 적이 있다"},
-      {q:"SNS가 아닌 직접 대화(전화·만남)로 소통하는 사람이 있다"},
-      {q:"누군가에게 부탁하거나 도움을 요청하는 것이 어렵지 않다"},
-      {q:"관계에서 불편할 때 'No'라고 말할 수 있다"},
-      {q:"나를 있는 그대로 받아들여 주는 사람이 주변에 있다"},
-      {q:"내 일(또는 학업)이 단순한 의무가 아닌 의미 있는 활동으로 느껴진다"},
-      {q:"일·학업으로 인해 개인 시간이나 건강을 심각하게 희생하지 않는다"},
-      {q:"나의 장점이나 강점이 현재 하는 일에 반영되고 있다"},
-      {q:"6개월 전보다 지금 더 성장했다고 느낀다"},
-      {q:"갈등이 생겼을 때 회피하지 않고 대화로 해결하려는 편이다"},
-      {q:"가까운 관계에서 감사함이나 애정을 표현하는 편이다"},
-      {q:"나의 감정 상태를 상대방에게 솔직하게 표현할 수 있다"},
-      {q:"일방적으로 희생하거나 착취당하는 관계가 현재 없다"},
+      {q:"내가 힘들거나 위기에 처했을 때 솔직하게 털어놓고 도움을 요청할 사람이 있다"},
+      {q:"최근 가족, 친구, 동료 등 소중한 사람들과 온전히 몰입하는 질 높은 시간을 보냈다"},
+      {q:"텍스트(메시지, SNS) 소통 외에 목소리를 듣거나 직접 만나 소통하는 사람들이 충분히 있다"},
+      {q:"가까운 관계에서 고마움, 미안함, 애정 등의 감정을 인색하지 않게 표현한다"},
+      {q:"누군가와 갈등이 생겼을 때, 감정적으로 대하거나 회피하지 않고 대화로 풀려고 노력한다"},
+      {q:"타인의 시선에 맞추기보다, 내 모습 그대로를 편안하게 보여줄 수 있는 관계가 충분히 있다"},
+    ],
+  },
+  { id:"career", num:"05", emoji:"✨", label:"일과 성장", tag:"그로스솔루션",
+    en:"Growth", color:T.lavD, light:T.lavL, border:T.lav, accent:T.lav,
+    desc:"일·학업의 의미와 성장 점검",
+    items:[
+      {q:"현재 내가 하고 있는 일(또는 학업)은 나에게 단순한 의무를 넘어 의미가 있다"},
+      {q:"일(또는 학업) 때문에 개인의 삶, 수면, 건강 등을 과도하게 희생하지 않는다 (워라밸)"},
+      {q:"나의 장점이나 강점이 현재 하고 있는 일(역할)에 잘 반영되고 있다고 느낀다"},
+      {q:"과거(예: 6개월 전)와 비교했을 때, 내가 조금 더 성장하거나 성숙해졌다고 느낀다"},
+      {q:"새로운 것을 배우거나 당면한 문제를 해결하는 과정에서 성취감을 느낀다"},
+      {q:"내가 속한 집단(학교, 직장, 공동체 등)에서 내 역할이 존중받고 있다고 느낀다"},
+    ],
+  },
+  { id:"extra", num:"06", emoji:"📅", label:"배경 정보 및 계획", tag:"인포",
+    en:"Background", color:T.grayD, light:T.grayL, border:T.gray, accent:T.gray,
+    desc:"점수에 반영되지 않는 참고 정보",
+    note:"이 항목은 점수에 포함되지 않는 참고용입니다.",
+    items:[
+      {q:"최근 1년 이내에 일상의 큰 변화(결혼, 입대, 독립 등)가 있었다", neutral:true},
+      {q:"향후 1년 이내에 학업/커리어의 변화(취업, 이직, 퇴사, 진학 등) 계획이 있다", neutral:true},
+      {q:"향후 1년 이내에 장기 해외 체류(여행, 유학, 어학연수 등) 계획이 있다", neutral:true},
     ],
   },
 ];
 
 const sectionBreaks = {
-  mental:{ 5:"자가 점검 Checklist" },
-  daily: { 7:"1년 이내 계획 Life Plan" },
-  social:{ 5:"직업·학업 Career & Study" },
+  mental: { 4:"자가 점검 (역채점)", 6:"참고 항목" },
+  routine:{ 4:"리듬 점검 (역채점)" },
 };
 
 function getGrade(pct) {
@@ -112,6 +109,48 @@ function getGrade(pct) {
   if (pct>=40) return {label:"Fair",      ko:"보통",     color:T.yellowD};
   if (pct>=20) return {label:"Caution",   ko:"주의 필요", color:"#B07030"};
   return             {label:"Attention", ko:"집중 관리", color:T.roseD};
+}
+
+function RadarChart({ data, size=280 }) {
+  const cx=size/2, cy=size/2, maxR=size*0.32;
+  const n=data.length;
+  const angles=data.map((_,i)=> -Math.PI/2 + (Math.PI*2*i)/n);
+  const points=data.map((d,i)=>{
+    const r=(d.value/100)*maxR;
+    return { x:cx+r*Math.cos(angles[i]), y:cy+r*Math.sin(angles[i]),
+             ax:cx+maxR*Math.cos(angles[i]), ay:cy+maxR*Math.sin(angles[i]),
+             lx:cx+(maxR+30)*Math.cos(angles[i]), ly:cy+(maxR+30)*Math.sin(angles[i]),
+             ...d };
+  });
+  const polyPts = points.map(p=>p.x+","+p.y).join(" ");
+  const rings = [0.25,0.5,0.75,1].map(scale=>
+    angles.map(a=>(cx+scale*maxR*Math.cos(a))+","+(cy+scale*maxR*Math.sin(a))).join(" ")
+  );
+  return (
+    <svg viewBox={"0 0 "+size+" "+size} width="100%" style={{overflow:"visible"}}>
+      {rings.map((pts,i)=>(
+        <polygon key={i} points={pts} fill={i===3?"#FAF8F4":"none"} stroke="#E8E0D8" strokeWidth="0.6"/>
+      ))}
+      {points.map((p,i)=>(
+        <line key={i} x1={cx} y1={cy} x2={p.ax} y2={p.ay} stroke="#E8E0D8" strokeWidth="0.6"/>
+      ))}
+      <polygon points={polyPts} fill="rgba(80,136,72,0.18)" stroke="#508848" strokeWidth="1.6" strokeLinejoin="round"/>
+      {points.map((p,i)=>(
+        <circle key={i} cx={p.x} cy={p.y} r="4" fill={p.color} stroke="#fff" strokeWidth="1.5"/>
+      ))}
+      {points.map((p,i)=>{
+        let anchor="middle";
+        if(p.lx<cx-8) anchor="end";
+        else if(p.lx>cx+8) anchor="start";
+        return (
+          <g key={i}>
+            <text x={p.lx} y={p.ly-3} textAnchor={anchor} fontSize="10" fontWeight="600" fill={p.color} fontFamily="'Cormorant Garamond',serif" fontStyle="italic">{p.en}</text>
+            <text x={p.lx} y={p.ly+11} textAnchor={anchor} fontSize="13" fontWeight="700" fill="#3A3535" fontFamily="'Noto Sans KR',sans-serif">{p.value}</text>
+          </g>
+        );
+      })}
+    </svg>
+  );
 }
 
 function ArcMeter({ pct, color, size=100 }) {
@@ -136,6 +175,9 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("intro");
   const [activeCat, setActiveCat] = useState("physical");
   const [aiResult, setAiResult] = useState(null);
+  const today = new Date().toISOString().split("T")[0];
+  const [userName, setUserName] = useState("");
+  const [checkDate, setCheckDate] = useState(today);
 
   const setMark = (catId, idx, mIdx) => {
     const key=catId + "-" + idx;
@@ -198,12 +240,11 @@ export default function App() {
   }).length;
 
   const generateAnalysis = () => {
-    const scores = categories.map(c => ({ id:c.id, label:c.label, en:c.en, score:catScore(c), grade:getGrade(catScore(c)).ko }));
+    const scores = categories.filter(c=>c.id!=="extra").map(c => ({ id:c.id, label:c.label, en:c.en, score:catScore(c), grade:getGrade(catScore(c)).ko }));
     const sorted = [...scores].sort((a,b) => a.score - b.score);
     const lowest = sorted[0];
     const highest = sorted[sorted.length-1];
     const avg = Math.round(scores.reduce((s,c)=>s+c.score,0)/scores.length);
-    const tr = totalRatio();
 
     const summaries = {
       high:   "전반적으로 웰니스 균형이 잘 잡혀 있어요. 꾸준히 유지해온 노력이 점수에 고스란히 드러나네요. 지금처럼 나를 잘 돌보는 습관을 이어가 보세요 🌿",
@@ -214,8 +255,9 @@ export default function App() {
     const adviceMap = {
       physical: "하루 10분 걷기나 스트레칭부터 시작해보세요. 작은 움직임이 몸 전체의 리듬을 바꿔줘요. 수면 시간도 조금씩 일정하게 맞춰보는 것이 큰 도움이 돼요.",
       mental:   "하루 5분, 조용히 자신의 감정을 들여다보는 시간을 가져보세요. 일기 쓰기나 짧은 명상이 감정 정리에 큰 도움이 될 수 있어요. 너무 스스로를 몰아붙이지 않아도 돼요.",
-      daily:    "아침 루틴 하나만 정해보세요. 일어나서 물 한 잔, 5분 스트레칭처럼 아주 작은 것부터요. 루틴이 쌓이면 하루 전체가 훨씬 안정적으로 느껴질 거예요.",
+      routine:  "아침 루틴 하나만 정해보세요. 일어나서 물 한 잔, 5분 스트레칭처럼 아주 작은 것부터요. 루틴이 쌓이면 하루 전체가 훨씬 안정적으로 느껴질 거예요.",
       social:   "가까운 사람에게 짧은 메시지 하나 먼저 보내보세요. 관계는 거창한 것보다 작고 꾸준한 연결로 단단해져요. 나를 표현하는 연습도 천천히 해보세요.",
+      career:   "내가 지금 하는 일의 작은 의미를 찾아보세요. 매일 일과 후 '오늘 잘한 한 가지'를 떠올리는 습관이 성장감을 높여줘요. 너무 큰 변화보다 작은 성취에 집중해보세요.",
     };
 
     const quotes = [
@@ -291,6 +333,30 @@ export default function App() {
         {/* ═══ INTRO ═══ */}
         {activeTab==="intro" && (
           <div style={{paddingTop:36}}>
+            {/* 이름 & 날짜 입력 */}
+            <div style={{background:T.card,borderRadius:14,padding:"18px 20px",marginBottom:20,border:`1px solid ${T.stroke}`}}>
+              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>MY INFO</div>
+              <div style={{marginBottom:12}}>
+                <div style={{fontSize:11,color:T.sub,fontWeight:500,marginBottom:6,...sans}}>이름</div>
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={e=>setUserName(e.target.value)}
+                  placeholder="이름을 입력해주세요"
+                  style={{width:"100%",padding:"10px 14px",border:`1px solid ${T.stroke}`,borderRadius:8,fontSize:13,color:T.text,background:T.bg,outline:"none",...sans}}
+                />
+              </div>
+              <div>
+                <div style={{fontSize:11,color:T.sub,fontWeight:500,marginBottom:6,...sans}}>날짜</div>
+                <input
+                  type="date"
+                  value={checkDate}
+                  onChange={e=>setCheckDate(e.target.value)}
+                  style={{width:"100%",padding:"10px 14px",border:`1px solid ${T.stroke}`,borderRadius:8,fontSize:13,color:T.text,background:T.bg,outline:"none",...sans}}
+                />
+              </div>
+            </div>
+
             {/* About Wellness — 따뜻한 인트로 */}
             <div style={{marginBottom:28}}>
               <div style={{fontSize:10,letterSpacing:"0.2em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>ABOUT WELLNESS</div>
@@ -454,108 +520,96 @@ export default function App() {
         {activeTab==="result" && (
           <div style={{paddingTop:32}}>
 
-            {/* 전체 비율 */}
-            {(()=>{const tr=totalRatio();return(
-            <div style={{background:T.card,borderRadius:18,padding:"22px 20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
-              <div style={{fontSize:10,letterSpacing:"0.2em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>전체 응답 비율</div>
-              {[{sym:"○",color:T.sageD,bg:T.sageL,val:tr.o,n:tr.oN},{sym:"△",color:T.yellowD,bg:T.yellowL,val:tr.t,n:tr.tN},{sym:"✕",color:T.roseD,bg:T.roseL,val:tr.x,n:tr.xN}].map(r=>(
-                <div key={r.sym} style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-                  <span style={{...serif,fontSize:16,color:r.color,width:18,textAlign:"center"}}>{r.sym}</span>
-                  <div style={{flex:1,background:T.stroke,borderRadius:3,height:7,overflow:"hidden"}}>
-                    <div style={{height:"100%",width:r.val+"%",background:r.bg,borderRadius:3,transition:"width 0.7s",border:"1px solid "+r.color+"50"}}/>
-                  </div>
-                  <span style={{fontSize:12,fontWeight:500,color:r.color,minWidth:32,textAlign:"right"}}>{r.val}%</span>
-                  <span style={{fontSize:11,color:T.muted,minWidth:20}}>{r.n}개</span>
-                </div>
-              ))}
-              <div style={{display:"flex",height:8,borderRadius:4,overflow:"hidden",marginTop:12}}>
-                <div style={{width:tr.o+"%",background:T.sage,transition:"width 0.7s"}}/>
-                <div style={{width:tr.t+"%",background:T.yellow,transition:"width 0.7s"}}/>
-                <div style={{width:tr.x+"%",background:T.rose,transition:"width 0.7s"}}/>
-              </div>
-            </div>
-            );})()}
-
-            {depAlert>=5&&(
-              <div style={{background:T.roseL,border:`1px solid ${T.rose}`,borderRadius:12,padding:"16px 18px",marginBottom:16}}>
-                <div style={{fontSize:10,fontWeight:600,color:T.roseD,letterSpacing:"0.12em",marginBottom:8,...sans}}>MENTAL HEALTH NOTICE</div>
-                <p style={{fontSize:13,color:T.text,lineHeight:1.8,margin:0,fontWeight:300,...sans}}>정신건강 자가 점검에서 <strong style={{fontWeight:600}}>{depAlert}개</strong> 주의 신호가 감지되었어요. 전문가 상담을 권장드립니다.</p>
+            {/* 이름/날짜 표시 */}
+            {(userName||checkDate)&&(
+              <div style={{background:T.card,borderRadius:12,padding:"14px 18px",marginBottom:14,border:`1px solid ${T.stroke}`,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                {userName&&<div>
+                  <div style={{fontSize:9,letterSpacing:"0.15em",color:T.muted,fontWeight:500,marginBottom:3,...sans}}>NAME</div>
+                  <div style={{...serif,fontSize:18,fontWeight:400,color:T.text,fontStyle:"italic"}}>{userName}</div>
+                </div>}
+                {checkDate&&<div style={{textAlign:"right"}}>
+                  <div style={{fontSize:9,letterSpacing:"0.15em",color:T.muted,fontWeight:500,marginBottom:3,...sans}}>DATE</div>
+                  <div style={{fontSize:12,color:T.sub,fontWeight:400,...sans}}>{checkDate}</div>
+                </div>}
               </div>
             )}
 
-            {/* 영역별 비율 */}
+            {/* 레이더 차트 — 5영역 종합 점수 */}
+            <div style={{background:T.card,borderRadius:18,padding:"24px 20px",marginBottom:16,border:`1px solid ${T.stroke}`,textAlign:"center"}}>
+              <div style={{fontSize:10,letterSpacing:"0.2em",color:T.muted,fontWeight:500,marginBottom:6,...sans}}>MY WELLNESS RADAR</div>
+              <div style={{...serif,fontSize:22,fontWeight:400,color:T.text,fontStyle:"italic",marginBottom:16}}>웰니스 균형 지도</div>
+              <RadarChart size={300} data={categories.filter(c=>c.id!=="extra").map(c=>({
+                en:c.en, label:c.label, color:c.color, value:catScore(c)
+              }))}/>
+              <div style={{fontSize:11,color:T.sub,marginTop:12,fontWeight:300,...sans,lineHeight:1.6}}>
+                각 영역의 점수가 균형 잡힐수록 안쪽 도형이 정오각형에 가까워져요
+              </div>
+            </div>
+
+            {depAlert>=2&&(
+              <div style={{background:T.roseL,border:`1px solid ${T.rose}`,borderRadius:12,padding:"16px 18px",marginBottom:16}}>
+                <div style={{fontSize:10,fontWeight:600,color:T.roseD,letterSpacing:"0.12em",marginBottom:8,...sans}}>MENTAL HEALTH NOTICE</div>
+                <p style={{fontSize:13,color:T.text,lineHeight:1.8,margin:0,fontWeight:300,...sans}}>정신건강 자가 점검 항목 중 <strong style={{fontWeight:600}}>{depAlert}개</strong>에서 주의 신호가 감지되었어요. 전문가 상담을 권장드립니다.</p>
+              </div>
+            )}
+
+            {/* 영역별 점수 */}
             <div style={{background:T.card,borderRadius:14,padding:"18px 20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
-              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>영역별 응답 분포</div>
-              {categories.map(cat=>{
-                const r=catRatio(cat);
+              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>영역별 점수</div>
+              {categories.filter(c=>c.id!=="extra").map(cat=>{
+                const p=catScore(cat);
                 return (
-                  <div key={cat.id} style={{marginBottom:14}}>
-                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:5}}>
+                  <div key={cat.id} style={{marginBottom:16}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
                       <div style={{display:"flex",alignItems:"center",gap:8}}>
                         <div style={{width:22,height:22,borderRadius:"50%",background:cat.light,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:cat.color,...sans}}>{cat.num}</div>
                         <span style={{...serif,fontSize:15,fontWeight:400,color:cat.color,fontStyle:"italic"}}>{cat.en}</span>
                         <span style={{fontSize:11,color:T.sub,...sans}}>{cat.label}</span>
                       </div>
-                      <span style={{fontSize:11,color:T.sageD,fontWeight:500,...sans}}>○ {r.o}%</span>
+                      <span style={{...serif,fontSize:18,fontWeight:500,color:cat.color}}>{p}</span>
                     </div>
-                    <div style={{display:"flex",height:7,borderRadius:4,overflow:"hidden"}}>
-                      <div style={{width:r.o+"%",background:T.sage,transition:"width 0.7s"}}/>
-                      <div style={{width:r.t+"%",background:T.yellow,transition:"width 0.7s"}}/>
-                      <div style={{width:r.x+"%",background:T.rose,transition:"width 0.7s"}}/>
-                    </div>
-                    <div style={{display:"flex",gap:10,marginTop:4}}>
-                      <span style={{fontSize:10,color:T.sageD,...sans}}>○ {r.oN}개</span>
-                      <span style={{fontSize:10,color:T.yellowD,...sans}}>△ {r.tN}개</span>
-                      <span style={{fontSize:10,color:T.roseD,...sans}}>✕ {r.xN}개</span>
+                    <div style={{height:6,background:T.stroke,borderRadius:3,overflow:"hidden"}}>
+                      <div style={{height:"100%",width:p+"%",background:cat.accent,borderRadius:3,transition:"width 0.7s"}}/>
                     </div>
                   </div>
                 );
               })}
-              <div style={{display:"flex",gap:14,paddingTop:10,borderTop:`1px solid ${T.stroke}`,marginTop:4}}>
-                <span style={{fontSize:10,color:T.sageD,...sans}}>● ○ 높을수록 좋음</span>
-                <span style={{fontSize:10,color:T.roseD,...sans}}>● ✕ 높으면 집중 필요</span>
-              </div>
             </div>
 
-            {/* life plan */}
+            {/* 배경 정보 & 계획 */}
             <div style={{background:T.card,borderRadius:14,padding:"20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
-              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>1-YEAR LIFE PLAN</div>
-              {categories.find(c=>c.id==="daily").items.filter(it=>it.neutral).map((item,ni)=>{
-                const i=categories.find(c=>c.id==="daily").items.indexOf(item);
-                const mIdx=answers["daily-" + i];
+              <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:14,...sans}}>BACKGROUND & PLANS</div>
+              {categories.find(c=>c.id==="extra").items.map((item,ni)=>{
+                const mIdx=answers["extra-" + ni];
                 const m=mIdx!==undefined?MARKS[mIdx]:null;
+                const cnt=categories.find(c=>c.id==="extra").items.length;
                 return (
-                  <div key={ni} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"9px 0",borderBottom:ni<5?`1px solid ${T.stroke}`:""}}>
-                    <span style={{fontSize:12,color:T.sub,flex:1,paddingRight:12,fontWeight:300,...sans}}>{item.q}</span>
+                  <div key={ni} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:ni<cnt-1?`1px solid ${T.stroke}`:""}}>
+                    <span style={{fontSize:12,color:T.sub,flex:1,paddingRight:12,fontWeight:300,...sans,lineHeight:1.5}}>{item.q}</span>
                     <span style={{...serif,fontSize:20,fontWeight:400,color:m?m.color:T.muted}}>{m?m.symbol:"—"}</span>
                   </div>
                 );
               })}
             </div>
 
-            {/* 집중 필요 영역 */}
+            {/* 집중 필요 영역 (점수 낮은 순) */}
             <div style={{background:T.card,borderRadius:14,padding:"20px",marginBottom:16,border:`1px solid ${T.stroke}`}}>
               <div style={{fontSize:10,letterSpacing:"0.18em",color:T.muted,fontWeight:500,marginBottom:16,...sans}}>집중이 필요한 영역</div>
-              {[...categories].sort((a,b)=>catRatio(b).x-catRatio(a).x).map((cat,i)=>{
-                const r=catRatio(cat);
+              {[...categories].filter(c=>c.id!=="extra").sort((a,b)=>catScore(a)-catScore(b)).map((cat,i,arr)=>{
+                const p=catScore(cat);
                 return (
-                  <div key={cat.id} style={{display:"flex",alignItems:"center",gap:12,paddingBottom:12,marginBottom:12,borderBottom:i<3?`1px solid ${T.stroke}`:""}}>
+                  <div key={cat.id} style={{display:"flex",alignItems:"center",gap:12,paddingBottom:12,marginBottom:12,borderBottom:i<arr.length-1?`1px solid ${T.stroke}`:""}}>
                     <div style={{...serif,fontSize:18,fontWeight:400,color:T.muted,width:18,flexShrink:0}}>{i+1}</div>
                     <div style={{flex:1}}>
                       <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
                         <span style={{...serif,fontSize:15,fontWeight:400,color:cat.color,fontStyle:"italic"}}>{cat.en}</span>
                         <span style={{fontSize:11,color:T.sub,...sans}}>{cat.label}</span>
                       </div>
-                      <div style={{display:"flex",height:5,borderRadius:3,overflow:"hidden"}}>
-                        <div style={{width:r.o+"%",background:T.sage}}/>
-                        <div style={{width:r.t+"%",background:T.yellow}}/>
-                        <div style={{width:r.x+"%",background:T.rose}}/>
+                      <div style={{height:4,background:T.stroke,borderRadius:2,overflow:"hidden"}}>
+                        <div style={{height:"100%",width:p+"%",background:cat.accent,borderRadius:2,transition:"width 0.7s"}}/>
                       </div>
                     </div>
-                    <div style={{textAlign:"right",flexShrink:0}}>
-                      <div style={{fontSize:13,fontWeight:500,color:T.roseD,...sans}}>✕ {r.x}%</div>
-                      <div style={{fontSize:10,color:T.sageD,...sans}}>○ {r.o}%</div>
-                    </div>
+                    <div style={{textAlign:"right",flexShrink:0,...serif,fontSize:18,fontWeight:500,color:cat.color}}>{p}</div>
                   </div>
                 );
               })}
