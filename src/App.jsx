@@ -178,6 +178,10 @@ export default function App() {
   const today = new Date().toISOString().split("T")[0];
   const [userName, setUserName] = useState("");
   const [checkDate, setCheckDate] = useState(today);
+  const [submitted, setSubmitted] = useState(false);
+
+  // ⚠️ 여기에 Apps Script 웹앱 URL을 붙여넣으세요
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbxBHR8hRUXzMTldDeXM4w5NWzZTzOD774NkBFN1Kb4NR202NN3yDpXWK81id3h2EwhA/exec";
 
   const setMark = (catId, idx, mIdx) => {
     const key=catId + "-" + idx;
@@ -282,6 +286,52 @@ export default function App() {
     const message = messages[Math.floor(Math.random() * messages.length)];
 
     setAiResult({ summary, advice, quote: quote.text + " " + quote.by, message, lowestLabel: lowest.label, highestLabel: highest.label });
+  };
+
+  const submitToSheet = async () => {
+    if (submitted) return; // 중복 제출 방지
+    if (!SHEET_URL || SHEET_URL.includes("붙여넣기")) {
+      console.warn("SHEET_URL이 설정되지 않았습니다.");
+      return;
+    }
+
+    // 50개 응답을 평탄화
+    const allAnswers = [];
+    categories.forEach(cat => {
+      cat.items.forEach((item, i) => {
+        const m = answers[cat.id + "-" + i];
+        allAnswers.push({
+          category: cat.label,
+          question: item.q,
+          answer: m !== undefined ? MARKS[m].symbol : "",
+        });
+      });
+    });
+
+    // 카테고리별 점수
+    const categoryScores = categories.map(c => ({
+      label: c.label,
+      score: catScore(c),
+    }));
+
+    try {
+      await fetch(SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: userName,
+          date: checkDate,
+          totalScore,
+          grade: totalGrade.ko,
+          categoryScores,
+          answers: allAnswers,
+        }),
+      });
+      setSubmitted(true);
+    } catch (err) {
+      console.error("시트 저장 실패:", err);
+    }
   };
 
   const serif={fontFamily:"'Cormorant Garamond',serif"};
@@ -508,7 +558,7 @@ export default function App() {
                   다음 — {categories[currentIdx+1].en} →
                 </button>
               ):(
-                <button onClick={()=>{ setActiveTab("result"); generateAnalysis(); }} style={{flex:2,padding:"13px",background:T.text,border:"none",borderRadius:10,color:"#fff",fontSize:12,fontWeight:500,cursor:"pointer",letterSpacing:"0.05em",...sans}}>
+                <button onClick={()=>{ setActiveTab("result"); generateAnalysis(); submitToSheet(); }} style={{flex:2,padding:"13px",background:T.text,border:"none",borderRadius:10,color:"#fff",fontSize:12,fontWeight:500,cursor:"pointer",letterSpacing:"0.05em",...sans}}>
                   결과 보기 →
                 </button>
               )}
@@ -645,7 +695,7 @@ export default function App() {
 
             </div>
 
-            <button onClick={()=>{setAnswers({});setActiveTab("intro");setActiveCat("physical");setAiResult(null);window.scrollTo(0,0);}} style={{
+            <button onClick={()=>{setAnswers({});setActiveTab("intro");setActiveCat("physical");setAiResult(null);setSubmitted(false);window.scrollTo(0,0);}} style={{
               width:"100%",padding:"13px",background:"transparent",
               border:`1px solid ${T.stroke}`,borderRadius:10,
               color:T.muted,fontSize:11,fontWeight:500,cursor:"pointer",
